@@ -15,7 +15,15 @@ export const styles: Styles = {
         },
         '*, *::before, &::after': {
             borderColor: mode('gray.200', 'gray.400')(props),
-            wordWrap: 'break-word'
+            wordWrap: 'break-word',
+            outline: 'none'
+        },
+        ':focus:not(:focus-visible)': {
+            boxShadow: 'none',
+            outline: 'none'
+        },
+        ':focus': {
+            boxShadow: '0 0 0 2px var(--chakra-colors-blue-400)'
         }
     })
 };
