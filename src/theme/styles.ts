@@ -2,10 +2,13 @@ import { mode, Styles } from '@chakra-ui/theme-tools';
 
 export const styles: Styles = {
     global: (props) => ({
+        'html, body, __next': {
+            height: '100%'
+        },
         body: {
             fontFamily: 'body',
-            color: mode('gray.800', 'whiteAlpha.900')(props),
-            bg: mode('white', 'gray.800')(props),
+            color: mode('gray.800', 'gray.50')(props),
+            bg: mode('white', 'gray.900')(props),
             transitionProperty: 'background-color',
             transitionDuration: 'normal',
             lineHeight: 'base'
