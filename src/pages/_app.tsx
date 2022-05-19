@@ -2,14 +2,14 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from 'theme';
-import { Layout } from 'components';
+import '@fontsource/rajdhani/400.css';
+import '@fontsource/rajdhani/500.css';
+import '@fontsource/rajdhani/600.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ChakraProvider theme={theme}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <Component {...pageProps} />
         </ChakraProvider>
     );
 }

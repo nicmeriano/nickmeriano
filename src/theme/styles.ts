@@ -2,7 +2,7 @@ import { mode, Styles } from '@chakra-ui/theme-tools';
 
 export const styles: Styles = {
     global: (props) => ({
-        'html, body, __next': {
+        'html, body, #__next': {
             height: '100%'
         },
         body: {
