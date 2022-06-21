@@ -2,6 +2,9 @@ import { mode, Styles } from '@chakra-ui/theme-tools';
 
 export const styles: Styles = {
     global: (props) => ({
+        html: {
+            scrollBehavior: 'smooth'
+        },
         'html, body, #__next': {
             height: '100%'
         },
