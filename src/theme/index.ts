@@ -1,4 +1,4 @@
-import { ChakraTheme, ThemeConfig, ThemeDirection } from '@chakra-ui/react';
+import { ChakraTheme, extendTheme, ThemeConfig, ThemeDirection } from '@chakra-ui/react';
 import { foundations } from './foundations';
 import { styles } from './styles';
 
@@ -10,10 +10,17 @@ const config: ThemeConfig = {
     cssVarPrefix: 'chakra'
 };
 
+const {
+    components: { Tabs }
+} = extendTheme() as ChakraTheme;
+
+// Remove Tab outline when focused
+Tabs.baseStyle = { ...Tabs.baseStyle, _focus: {} };
+
 export const theme: ChakraTheme = {
     direction,
     ...foundations,
-    components: {},
+    components: { Tabs },
     styles,
     config
 };
