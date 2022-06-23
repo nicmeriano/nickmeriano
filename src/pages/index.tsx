@@ -1,19 +1,18 @@
 import {
     Avatar,
+    Badge,
     Box,
+    Divider,
     Grid,
     GridItem,
     HStack,
     Link,
-    List,
-    ListItem,
     Tab,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
     Text,
-    UnorderedList,
     VStack
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
@@ -195,58 +194,28 @@ const Home: NextPage = () => {
             <Box
                 position="fixed"
                 width="full"
-                top="0"
+                top="-8"
                 left="0"
                 height="10vh"
                 transition="opacity 300ms, transform 300ms"
                 opacity={isScrolled ? 0 : 0.8}
-                pointerEvents="none"
-                transform={isScrolled ? 'translateY(-100%)' : 'rotate(1.5deg)'}
+                transform={isScrolled ? 'translateY(-100%)' : 'rotate(-1.5deg)'}
                 borderBottom="1px solid"
                 borderColor="gray.700"
             ></Box>
             <Box
                 position="fixed"
                 width="full"
-                bottom="0"
+                bottom="-8"
                 left="0"
-                height="10vh"
+                height="20vh"
                 transition="opacity 300ms, transform 300ms"
                 opacity={isScrolled ? 0 : 0.8}
-                pointerEvents="none"
                 transform={isScrolled ? 'translateY(100%)' : 'rotate(-1.5deg)'}
                 borderTop="1px solid"
                 borderColor="gray.700"
             ></Box>
-            {/* <Box
-                position="absolute"
-                width="full"
-                bottom="0"
-                left="0"
-                height="50vh"
-                // background="gray.800"
-                transition="opacity 300ms"
-                opacity={isScrolled ? 0 : .8}
-                pointerEvents="none"
-                _before={{
-                    content: "''",
-                    backgroundImage:
-                        'url(https://media-exp2.licdn.com/dms/image/C5616AQEfb9Lxer435A/profile-displaybackgroundimage-shrink_350_1400/0/1565886445409?e=1661385600&v=beta&t=3HbyudrCDsXbRwbY6SRJ95onunYsMsPilt1eOxY-P48)',
-                    width: '90%',
-                    height: '20vh',
-                    display: 'block',
-                    position: 'fixed',
-                    top: '10',
-                    left: 0,
-                    right: 0,
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                    margin: '0 auto',
-                    borderRadius: 'md',
-                    opacity: .5
-                }}
-            ></Box> */}
+
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
             <Box id="header" position="fixed" width="full" h="10px"></Box>
             <Box
@@ -334,7 +303,7 @@ const Home: NextPage = () => {
                             </HStack>
                         </Box>
                         <Avatar
-                            border="2px solid var(--chakra-colors-gray-700)"
+                            border="4px solid var(--chakra-colors-gray-200)"
                             w="128px"
                             src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
                         ></Avatar>
@@ -349,68 +318,91 @@ const Home: NextPage = () => {
                         id="about"
                         maxWidth="550px"
                     >
-                        <Tabs colorScheme="orange" variant="solid-rounded" minHeight="44">
-                            <TabList mb="4" borderColor="gray.800">
-                                <Tab borderRadius="md">General</Tab>
-                                <Tab borderRadius="md">Tech Stack</Tab>
-                                <Tab borderRadius="md">Hobbies</Tab>
+                        <Tabs colorScheme="orange">
+                            <TabList mb="6" borderColor="gray.800">
+                                <Tab>Intro</Tab>
+                                <Tab>Tech Stack</Tab>
+                                <Tab>Hobbies</Tab>
                             </TabList>
-
-                            <TabPanels>
+                            <TabPanels color="gray.300" minHeight="250px">
                                 <TabPanel>
                                     <VStack alignItems="start" letterSpacing="wide">
                                         <Text>
-                                            Experienced front-end engineer with an affinity for UI/UX design, passionate
-                                            about building applications for the web.
-                                        </Text>
-
-                                        <Text>
-                                            Currently leading the front-end team at{' '}
-                                            <Text as="span" color="orange.400">
+                                            Hey, I&apos;m Nick. I&apos;m a software engineer at{' '}
+                                            <Link target="_blank" href="https://ephesoft.com" color="gray.50">
                                                 Ephesoft
-                                            </Text>
-                                            , building the future of intelligent document processing and automation.
+                                            </Link>
+                                            , where my team is building the future of intelligent document processing
+                                            and automation.
                                         </Text>
+                                        <Text>
+                                            Specialized in frontend development, I have an affinity for UI/UX design and
+                                            am passionate about building applications for the web.
+                                        </Text>
+                                        <Text pt="6">Welcome to my website!</Text>
                                     </VStack>
                                 </TabPanel>
                                 <TabPanel>
-                                    <p>two!</p>
+                                    <VStack alignItems="start">
+                                        <Text mb="6">
+                                            {' '}
+                                            Here&apos;s a (small) list of tools, languages and frameworks I use daily:
+                                        </Text>
+
+                                        <Divider borderColor="gray.700" />
+                                        <HStack w="full">
+                                            <Text flex="1">Frontend</Text>
+                                            <HStack justifyContent="end">
+                                                <Badge fontSize="sm">Angular</Badge>
+                                                <Badge fontSize="sm">Typescript</Badge>
+                                                <Badge fontSize="sm">RxJS</Badge>
+                                                <Badge fontSize="sm">HTML5</Badge>
+                                                <Badge fontSize="sm">CSS3</Badge>
+                                            </HStack>
+                                        </HStack>
+                                        <Divider borderColor="gray.700" />
+                                        <HStack w="full">
+                                            <Text flex="1">Backend</Text>
+                                            <HStack justifyContent="end">
+                                                <Badge fontSize="sm">NodeJS</Badge>
+                                                <Badge fontSize="sm">AWS</Badge>
+                                                <Badge fontSize="sm">Bitbucket Pipelines</Badge>
+                                            </HStack>
+                                        </HStack>
+                                        <Divider borderColor="gray.700" />
+
+                                        <HStack w="full">
+                                            <Text flex="1">Testing</Text>
+                                            <HStack justifyContent="end">
+                                                <Badge fontSize="sm">Cypress</Badge>
+                                                <Badge fontSize="sm">Jasmine</Badge>
+                                                <Badge fontSize="sm">Mocha</Badge>
+                                            </HStack>
+                                        </HStack>
+                                        <Divider borderColor="gray.700" />
+
+                                        <HStack w="full">
+                                            <Text flex="1">Tools & Other</Text>
+                                            <HStack justifyContent="end">
+                                                <Badge fontSize="sm">VS Code</Badge>
+                                                <Badge fontSize="sm">Figma</Badge>
+                                                <Badge fontSize="sm">Google</Badge>
+                                                <Badge fontSize="sm">New Relic</Badge>
+                                            </HStack>
+                                        </HStack>
+                                        <Divider borderColor="gray.700" />
+                                    </VStack>
                                 </TabPanel>
                                 <TabPanel>
-                                    <p>three!</p>
+                                    <Text>
+                                        When not in the office I&apos;me most likely to be found enjoying the outdoors,
+                                        whether that be hiking, playing tennis or at my favorite coffee shop down the
+                                        street.
+                                    </Text>
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </Box>
-                    {/* <Box
-                        as="section"
-                        data-section="tech-stack"
-                        opacity={isScrolled ? 1 : 0}
-                        transition="opacity 300ms"
-                        fontSize="lg"
-                        id="tech-stack"
-                        mb="12rem"
-                        mt="24"
-                    >
-                        <Text mb="4" color="gray.400" textTransform="uppercase">
-                            Tech Stack
-                        </Text>
-                        <VStack alignItems="start" letterSpacing="wide">
-                            <Text>Here are some of the tools & technologies I most frequently use:</Text>
-                        </VStack>
-                        <UnorderedList>
-                            <ListItem>Angular</ListItem>
-                            <ListItem>Typescript</ListItem>
-                            <ListItem>RxJS</ListItem>
-                            <ListItem>Git</ListItem>
-                            <ListItem>VS Code</ListItem>
-                            <ListItem>AWS</ListItem>
-                            <ListItem>Bitbucket Pipelines</ListItem>
-                            <ListItem>HTML5</ListItem>
-                            <ListItem>CSS3 (SCSS)</ListItem>
-                            <ListItem>NodeJS</ListItem>
-                        </UnorderedList>
-                    </Box> */}
                     <Box
                         ref={projectsRef}
                         as="section"
