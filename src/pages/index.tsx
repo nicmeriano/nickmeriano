@@ -5,14 +5,18 @@ import {
     Divider,
     Grid,
     GridItem,
+    Heading,
     HStack,
     Link,
+    Show,
+    Stack,
     Tab,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
     Text,
+    useBreakpointValue,
     VStack
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
@@ -202,6 +206,7 @@ const Home: NextPage = () => {
                 transform={isScrolled ? 'translateY(-100%)' : 'rotate(-1.5deg)'}
                 borderBottom="1px solid"
                 borderColor="gray.700"
+                bg="gray.800"
             ></Box>
             <Box
                 position="fixed"
@@ -214,6 +219,7 @@ const Home: NextPage = () => {
                 transform={isScrolled ? 'translateY(100%)' : 'rotate(-1.5deg)'}
                 borderTop="1px solid"
                 borderColor="gray.700"
+                bg="gray.800"
             ></Box>
 
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
@@ -226,6 +232,8 @@ const Home: NextPage = () => {
                 width="full"
                 h="8"
                 bg="linear-gradient(180deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
+                opacity={isScrolled ? '1' : '0'}
+                transition="opacity 300ms"
             ></Box>
             <Box
                 position="fixed"
@@ -235,16 +243,19 @@ const Home: NextPage = () => {
                 width="full"
                 h="8"
                 bg="linear-gradient(0deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
+                opacity={isScrolled ? '1' : '0'}
+                transition="opacity 300ms"
             ></Box>
             <Grid
-                gridTemplate="sidenav main"
-                gridTemplateColumns="1fr minmax(600px,770px)"
+                gridTemplateAreas={{ base: `'main main'`, lg: `'sidenav main'` }}
+                gridTemplateColumns="1fr 2fr"
                 mx="auto"
-                width="fit-content"
-                gap="4"
+                width="full"
+                maxWidth={{ base: 'lg', lg: '5xl' }}
                 pt="30vh"
+                gap="2"
             >
-                <GridItem width="310px" height="100%">
+                <GridItem width="100%" height="100%" gridArea="sidenav" display={{ base: 'none', lg: 'block' }} pl="6">
                     <VStack color="gray.300" alignItems="end" position="sticky" p="2" top="60px">
                         <NavLink
                             expanded={isScrolled}
@@ -269,11 +280,17 @@ const Home: NextPage = () => {
                         </NavLink>
                     </VStack>
                 </GridItem>
-                <GridItem w="100%" h="full" p="8" pt="2" color="gray.100" pb="80vh">
-                    <HStack justify="start" align="start" gap="24">
-                        <Box as="section" mb="24">
+                <GridItem w="full" h="full" p="6" pt="2" color="gray.100" pb="60vh" gridArea="main">
+                    <Stack
+                        justify="space-between"
+                        align="start"
+                        gap="12"
+                        maxWidth="lg"
+                        direction={{ base: 'column-reverse', sm: 'row' }}
+                    >
+                        <Box as="section" mb="32">
                             <Text fontSize="lg">Hi, I&apos;m</Text>
-                            <Text fontSize="5xl" lineHeight="none" mt="1" textTransform="uppercase">
+                            <Text fontSize="5xl" lineHeight="none" mt="1" textTransform="uppercase" whiteSpace="nowrap">
                                 Nick Meriano
                             </Text>
                             <Text fontSize="xl" lineHeight="none" letterSpacing="wide" color="gray.200">
@@ -302,22 +319,34 @@ const Home: NextPage = () => {
                                 </Link>
                             </HStack>
                         </Box>
-                        <Avatar
-                            border="4px solid var(--chakra-colors-gray-200)"
-                            w="128px"
-                            src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
-                        ></Avatar>
-                    </HStack>
+                        <Show above="sm">
+                            <Avatar
+                                border="4px solid var(--chakra-colors-gray-200)"
+                                size={useBreakpointValue({ base: 'xl', md: '2xl' })}
+                                src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
+                            ></Avatar>
+                        </Show>
+                    </Stack>
                     <Box
                         as="section"
                         data-section="about"
                         opacity={isScrolled ? 1 : 0}
                         transition="opacity 300ms"
                         fontSize="lg"
-                        mb="64"
+                        mb="24"
                         id="about"
-                        maxWidth="550px"
+                        pt="8"
                     >
+                        <Heading
+                            mb="8"
+                            color="gray.500"
+                            textTransform="uppercase"
+                            fontWeight="medium"
+                            fontSize="2xl"
+                            letterSpacing="widest"
+                        >
+                            Profile
+                        </Heading>
                         <Tabs colorScheme="orange">
                             <TabList mb="6" borderColor="gray.800">
                                 <Tab>Intro</Tab>
@@ -346,7 +375,8 @@ const Home: NextPage = () => {
                                     <VStack alignItems="start">
                                         <Text mb="6">
                                             {' '}
-                                            Here&apos;s a (small) list of tools, languages and frameworks I use daily:
+                                            Here&apos;s a (small) list of tools, languages and frameworks I frequently
+                                            use:
                                         </Text>
 
                                         <Divider borderColor="gray.700" />
@@ -411,11 +441,19 @@ const Home: NextPage = () => {
                         transition="opacity 300ms"
                         fontSize="lg"
                         mb="64"
+                        pt="8"
                         id="projects"
                     >
-                        <Text mb="8" color="gray.500" textTransform="uppercase" fontWeight="medium">
-                            Projects
-                        </Text>
+                        <Heading
+                            mb="8"
+                            color="gray.500"
+                            textTransform="uppercase"
+                            fontWeight="medium"
+                            fontSize="2xl"
+                            letterSpacing="widest"
+                        >
+                            Open Source
+                        </Heading>
                         <VStack wrap="wrap" gap="2" spacing="0" role="group">
                             {projects.map((project) => (
                                 <Box
@@ -431,7 +469,6 @@ const Home: NextPage = () => {
                                     cursor="pointer"
                                     transition="transform 200ms ease-in-out, opacity 200ms"
                                     _hover={{
-                                        // transform: 'scale(1.06)',
                                         opacity: '1 !important'
                                     }}
                                 >
@@ -458,29 +495,6 @@ const Home: NextPage = () => {
                                 </Box>
                             ))}
                         </VStack>
-                        {/* <HStack wrap="wrap" gap="8" spacing="0">
-                            {projects.map((project) => (
-                                <Box
-                                    key={project.name}
-                                    h="480px"
-                                    w="320px"
-                                    borderRadius="md"
-                                    position="relative"
-                                    _even={{ transform: 'translateY(50px)' }}
-                                    bg={`linear-gradient(0deg, rgb(34, 35, 38) 9%, rgba(33, 34, 37, 0.89) 42%, rgba(34, 35, 38, 0) 156%), url(${project.img}) center top / cover`}
-                                    opacity=".7"
-                                    cursor="pointer"
-                                    transition="transform 300ms, opacity 300ms"
-                                    _hover={{
-                                        transform: 'scale(1.02)',
-                                        opacity: 1,
-                                        _even: {
-                                            transform: 'scale(1.02) translateY(50px)'
-                                        }
-                                    }}
-                                ></Box>
-                            ))}
-                        </HStack> */}
                     </Box>
                     <Box
                         as="section"
@@ -490,10 +504,29 @@ const Home: NextPage = () => {
                         fontSize="lg"
                         mb="24"
                         id="contact"
+                        color="gray.300"
+                        pt="8"
                     >
-                        <Text mb="8" color="gray.500" textTransform="uppercase" fontWeight="medium">
-                            Contact
-                        </Text>
+                        <Heading
+                            mb="8"
+                            color="gray.500"
+                            textTransform="uppercase"
+                            fontWeight="medium"
+                            fontSize="2xl"
+                            letterSpacing="widest"
+                        >
+                            Let&apos;s Connect
+                        </Heading>
+                        <VStack alignItems="start" letterSpacing="wide">
+                            <Text>
+                                Looking to hire a frontend engineer, chat about web development or just want to say hi?
+                                Whatever it is, shoot me an email at{' '}
+                                <Link href="mailto:nicmeriano@gmail.com" color="orange">
+                                    nicmeriano@gmail.com
+                                </Link>{' '}
+                                and I&apos;ll get back to you as soon as I can.
+                            </Text>
+                        </VStack>
                     </Box>
                 </GridItem>
             </Grid>

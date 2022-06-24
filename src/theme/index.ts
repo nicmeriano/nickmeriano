@@ -11,7 +11,7 @@ const config: ThemeConfig = {
 };
 
 const {
-    components: { Tabs, Badge, Divider }
+    components: { Tabs, Badge, Divider, Avatar }
 } = extendTheme() as ChakraTheme;
 
 // Remove Tab outline when focused
@@ -20,7 +20,7 @@ Tabs.baseStyle = { ...Tabs.baseStyle, _focus: {} };
 export const theme: ChakraTheme = {
     direction,
     ...foundations,
-    components: { Tabs, Badge, Divider },
+    components: { Tabs, Badge, Divider, Avatar },
     styles,
     config
 };

@@ -14,7 +14,8 @@ export const styles: Styles = {
             bg: mode('white', 'gray.900')(props),
             transitionProperty: 'background-color',
             transitionDuration: 'normal',
-            lineHeight: 'base'
+            lineHeight: 'base',
+            overflowX: 'hidden'
         },
         '*::placeholder': {
             color: mode('gray.500', 'gray.200')(props)
