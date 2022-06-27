@@ -8,7 +8,6 @@ import {
     Heading,
     HStack,
     Link,
-    Show,
     Stack,
     Tab,
     TabList,
@@ -16,12 +15,13 @@ import {
     TabPanels,
     Tabs,
     Text,
-    useBreakpointValue,
+    Tooltip,
     VStack
 } from '@chakra-ui/react';
+import { Icon } from 'components';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 
 type Project = {
     name: string;
@@ -76,35 +76,22 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
     return (
         <NextLink passHref href={href}>
             <Link
-                px="4"
-                py="2"
+                px="5"
+                py="3"
                 borderColor="gray.800"
-                border={`1px solid ${expanded ? 'transparent' : 'var(--chakra-colors-gray-700)'}`}
-                // bg="gray.800"
-                borderRadius="3px"
+                border={`1px solid ${expanded ? 'transparent' : 'var(--chakra-colors-gray-800)'}`}
+                borderRadius="md"
                 minWidth={expanded ? '100%' : 0}
                 w="fit-content"
-                // alignSelf={expanded ? 'stretch' : 'flex-end'}
-                transition="min-width 250ms ease-in, background-color 300ms"
-                bg={active ? 'gray.800' : 'transparent'}
+                transition="min-width 250ms ease-in, background-color 300ms, transform 250ms ease-out"
+                bg={expanded ? (active ? 'teal.300' : 'transparent') : 'transparent'}
+                color={expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary'}
+                fontWeight={active ? 'semibold' : 'medium'}
+                transform={active ? 'scale(1.03)' : ''}
+                lineHeight="none"
                 position="relative"
                 _hover={{
-                    bg: 'gray.800'
-                }}
-                _before={{
-                    content: "''",
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    marginTop: 'auto',
-                    marginBottom: 'auto',
-                    left: '-8px',
-                    height: '75%',
-                    width: '4px',
-                    borderRadius: '3px',
-                    background: 'orange.400',
-                    display: active ? 'block' : 'none',
-                    transition: 'display 500ms'
+                    bg: active ? 'teal.300' : 'gray.800'
                 }}
                 data-navlink
             >
@@ -116,7 +103,6 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
 
 const Home: NextPage = () => {
     const [isScrolled, setIsScrolled] = useState(false);
-    const projectsRef = useRef(null);
     const [activeSection, setActiveSection] = useState<string>();
 
     useEffect(() => {
@@ -195,7 +181,7 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Box
+            {/* <Box
                 position="fixed"
                 width="full"
                 top="-8"
@@ -203,27 +189,32 @@ const Home: NextPage = () => {
                 height="10vh"
                 transition="opacity 300ms, transform 300ms"
                 opacity={isScrolled ? 0 : 0.8}
-                transform={isScrolled ? 'translateY(-100%)' : 'rotate(-1.5deg)'}
-                borderBottom="1px solid"
-                borderColor="gray.700"
-                bg="gray.800"
-            ></Box>
-            <Box
+                transform={isScrolled ? 'translateY(-100%)' : 'rotate(0)'}
+                borderBottom="2px solid"
+                borderColor="gray.800"
+                // bg="teal.600"
+            ></Box> */}
+            {/* <Box
                 position="fixed"
                 width="full"
-                bottom="-8"
+                bottom="0"
                 left="0"
-                height="20vh"
+                height="24"
                 transition="opacity 300ms, transform 300ms"
                 opacity={isScrolled ? 0 : 0.8}
-                transform={isScrolled ? 'translateY(100%)' : 'rotate(-1.5deg)'}
-                borderTop="1px solid"
-                borderColor="gray.700"
-                bg="gray.800"
-            ></Box>
+                transform={isScrolled ? 'translateY(100%)' : 'rotate(0)'}
+                // borderTop="2px solid"
+                // borderColor="gray.800"
+                // bg="teal.600"
+                display="grid"
+                alignContent="center"
+                justifyContent="center"
+            >
+                <Icon name="chevron-down" size="xl" animation={`${float} 3s infinite`} color="teal.500"/>
+            </Box> */}
 
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
-            <Box id="header" position="fixed" width="full" h="10px"></Box>
+            <Box id="header" position="fixed" width="full" h="24px"></Box>
             <Box
                 position="fixed"
                 zIndex="overlay"
@@ -253,10 +244,10 @@ const Home: NextPage = () => {
                 width="full"
                 maxWidth={{ base: 'lg', lg: '5xl' }}
                 pt="30vh"
-                gap="2"
+                gap="6"
             >
                 <GridItem width="100%" height="100%" gridArea="sidenav" display={{ base: 'none', lg: 'block' }} pl="6">
-                    <VStack color="gray.300" alignItems="end" position="sticky" p="2" top="60px">
+                    <VStack alignItems="end" position="sticky" p="2" top="12">
                         <NavLink
                             expanded={isScrolled}
                             active={isScrolled && (!activeSection || activeSection === 'about')}
@@ -280,7 +271,7 @@ const Home: NextPage = () => {
                         </NavLink>
                     </VStack>
                 </GridItem>
-                <GridItem w="full" h="full" p="6" pt="2" color="gray.100" pb="60vh" gridArea="main">
+                <GridItem w="full" h="full" p="6" pt="0" pb="60vh" gridArea="main">
                     <Stack
                         justify="space-between"
                         align="start"
@@ -289,43 +280,44 @@ const Home: NextPage = () => {
                         direction={{ base: 'column-reverse', sm: 'row' }}
                     >
                         <Box as="section" mb="32">
-                            <Text fontSize="lg">Hi, I&apos;m</Text>
-                            <Text fontSize="5xl" lineHeight="none" mt="1" textTransform="uppercase" whiteSpace="nowrap">
+                            <Text fontSize="lg" mb="2">
+                                Hi, I&apos;m
+                            </Text>
+                            <Heading size="2xl" whiteSpace="nowrap" mb="1">
                                 Nick Meriano
-                            </Text>
-                            <Text fontSize="xl" lineHeight="none" letterSpacing="wide" color="gray.200">
-                                Software Engineer at <strong>Ephesoft</strong>
-                            </Text>
-                            <HStack
-                                mt="4"
-                                color="gray.400"
-                                spacing="4"
-                                fontSize="lg"
-                                sx={{
-                                    '> *:hover': {
-                                        color: 'orange.400',
-                                        transition: 'color 300ms'
-                                    }
-                                }}
+                            </Heading>
+                            <Text
+                                fontSize="xl"
+                                whiteSpace="nowrap"
+                                color="text.secondary"
+                                sx={{ span: { color: 'text.primary' } }}
                             >
-                                <Link target="_blank" href="https://github.com/nicmeriano">
-                                    Github
-                                </Link>
-                                <Link target="_blank" href="https://linkedin.com">
-                                    LinkedIn
-                                </Link>
-                                <Link target="_blank" href="https://codepen.com">
-                                    Codepen
-                                </Link>
+                                Software Engineer at <span>Ephesoft</span>
+                            </Text>
+                            <HStack mt="6" spacing="5">
+                                <Tooltip label="GitHub">
+                                    <Link isExternal href="https://github.com/nicmeriano" color="text.secondary">
+                                        <Icon name="github" />
+                                    </Link>
+                                </Tooltip>
+                                <Tooltip label="LinkedIn">
+                                    <Link isExternal href="https://linkedin.com" color="text.secondary">
+                                        <Icon name="linkedin" />
+                                    </Link>
+                                </Tooltip>
+                                <Tooltip label="Email">
+                                    <Link isExternal href="mailto:nicmeriano@gmail.com" color="text.secondary">
+                                        <Icon name="mail" />
+                                    </Link>
+                                </Tooltip>
                             </HStack>
                         </Box>
-                        <Show above="sm">
-                            <Avatar
-                                border="4px solid var(--chakra-colors-gray-200)"
-                                size={useBreakpointValue({ base: 'xl', md: '2xl' })}
-                                src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
-                            ></Avatar>
-                        </Show>
+
+                        <Avatar
+                            border="2px solid var(--chakra-colors-gray-300)"
+                            size={{ base: 'xl', md: '2xl' }}
+                            src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
+                        ></Avatar>
                     </Stack>
                     <Box
                         as="section"
@@ -333,32 +325,21 @@ const Home: NextPage = () => {
                         opacity={isScrolled ? 1 : 0}
                         transition="opacity 300ms"
                         fontSize="lg"
-                        mb="24"
                         id="about"
                         pt="8"
                     >
-                        <Heading
-                            mb="8"
-                            color="gray.500"
-                            textTransform="uppercase"
-                            fontWeight="medium"
-                            fontSize="2xl"
-                            letterSpacing="widest"
-                        >
-                            Profile
-                        </Heading>
-                        <Tabs colorScheme="orange">
+                        <Tabs colorScheme="teal">
                             <TabList mb="6" borderColor="gray.800">
                                 <Tab>Intro</Tab>
                                 <Tab>Tech Stack</Tab>
                                 <Tab>Hobbies</Tab>
                             </TabList>
-                            <TabPanels color="gray.300" minHeight="250px">
-                                <TabPanel>
+                            <TabPanels minHeight="270px" color="text.secondary">
+                                <TabPanel px="0">
                                     <VStack alignItems="start" letterSpacing="wide">
                                         <Text>
                                             Hey, I&apos;m Nick. I&apos;m a software engineer at{' '}
-                                            <Link target="_blank" href="https://ephesoft.com" color="gray.50">
+                                            <Link target="_blank" href="https://ephesoft.com">
                                                 Ephesoft
                                             </Link>
                                             , where my team is building the future of intelligent document processing
@@ -368,10 +349,10 @@ const Home: NextPage = () => {
                                             Specialized in frontend development, I have an affinity for UI/UX design and
                                             am passionate about building applications for the web.
                                         </Text>
-                                        <Text pt="6">Welcome to my website!</Text>
+                                        <Text pt="4">Welcome to my website!</Text>
                                     </VStack>
                                 </TabPanel>
-                                <TabPanel>
+                                <TabPanel px="0">
                                     <VStack alignItems="start">
                                         <Text mb="6">
                                             {' '}
@@ -423,7 +404,7 @@ const Home: NextPage = () => {
                                         <Divider borderColor="gray.700" />
                                     </VStack>
                                 </TabPanel>
-                                <TabPanel>
+                                <TabPanel px="0">
                                     <Text>
                                         When not in the office I&apos;me most likely to be found enjoying the outdoors,
                                         whether that be hiking, playing tennis or at my favorite coffee shop down the
@@ -434,33 +415,21 @@ const Home: NextPage = () => {
                         </Tabs>
                     </Box>
                     <Box
-                        ref={projectsRef}
                         as="section"
                         data-section="projects"
                         opacity={isScrolled ? 1 : 0}
                         transition="opacity 300ms"
                         fontSize="lg"
-                        mb="64"
-                        pt="8"
+                        pt="32"
                         id="projects"
                     >
-                        <Heading
-                            mb="8"
-                            color="gray.500"
-                            textTransform="uppercase"
-                            fontWeight="medium"
-                            fontSize="2xl"
-                            letterSpacing="widest"
-                        >
-                            Open Source
-                        </Heading>
                         <VStack wrap="wrap" gap="2" spacing="0" role="group">
                             {projects.map((project) => (
                                 <Box
                                     key={project.name}
                                     p="10"
                                     w="full"
-                                    borderRadius="sm"
+                                    borderRadius="md"
                                     position="relative"
                                     _groupHover={{
                                         opacity: '0.5'
@@ -479,7 +448,6 @@ const Home: NextPage = () => {
                                                 textTransform="uppercase"
                                                 fontSize="xs"
                                                 fontWeight="semibold"
-                                                color="gray.300"
                                                 letterSpacing="widest"
                                             >
                                                 {tech}
@@ -489,9 +457,7 @@ const Home: NextPage = () => {
                                     <Text fontSize="2xl" fontWeight="semibold">
                                         {project.name}
                                     </Text>
-                                    <Text fontSize="md" color="gray.400">
-                                        {project.description}
-                                    </Text>
+                                    <Text fontSize="md">{project.description}</Text>
                                 </Box>
                             ))}
                         </VStack>
@@ -502,29 +468,19 @@ const Home: NextPage = () => {
                         opacity={isScrolled ? 1 : 0}
                         transition="opacity 300ms"
                         fontSize="lg"
-                        mb="24"
+                        mb="48"
                         id="contact"
-                        color="gray.300"
-                        pt="8"
+                        pt="64"
                     >
-                        <Heading
-                            mb="8"
-                            color="gray.500"
-                            textTransform="uppercase"
-                            fontWeight="medium"
-                            fontSize="2xl"
-                            letterSpacing="widest"
-                        >
+                        <Heading mb="8" color="text.secondary" size="md">
                             Let&apos;s Connect
                         </Heading>
                         <VStack alignItems="start" letterSpacing="wide">
-                            <Text>
+                            <Text color="text.secondary">
                                 Looking to hire a frontend engineer, chat about web development or just want to say hi?
                                 Whatever it is, shoot me an email at{' '}
-                                <Link href="mailto:nicmeriano@gmail.com" color="orange">
-                                    nicmeriano@gmail.com
-                                </Link>{' '}
-                                and I&apos;ll get back to you as soon as I can.
+                                <Link href="mailto:nicmeriano@gmail.com">nicmeriano@gmail.com</Link> and I&apos;ll get
+                                back to you as soon as I can.
                             </Text>
                         </VStack>
                     </Box>

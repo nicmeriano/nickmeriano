@@ -10,7 +10,7 @@ export const styles: Styles = {
         },
         body: {
             fontFamily: 'body',
-            color: mode('gray.800', 'gray.50')(props),
+            color: mode('gray.800', 'text.primary')(props),
             bg: mode('white', 'gray.900')(props),
             transitionProperty: 'background-color',
             transitionDuration: 'normal',

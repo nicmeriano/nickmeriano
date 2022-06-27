@@ -9,10 +9,36 @@
         "lint": "next lint",
         "prepare": "husky install",
         "gen:theme-types": "chakra-cli tokens src/theme",
-        "postinstall": "npm run gen:theme-types"
+        "postinstall": "npm run gen:theme-types",
+        "generate-icons": "svg-to-ts-object"
+    },
+    "svg-to-ts": {
+        "delimiter": "KEBAB",
+        "srcFiles": [
+            "./src/assets/icons/**/*.svg"
+        ],
+        "outputDirectory": "./src/components/Icon/icons",
+        "typeName": "Icon",
+        "prefix": "",
+        "fileName": "icons",
+        "svgoConfig": {
+            "plugins": [
+                "cleanupAttrs",
+                "removeViewBox",
+                "removeDimensions",
+                {
+                    "name": "removeAttrs",
+                    "params": {
+                        "attrs": [
+                            "fill"
+                        ]
+                    }
+                }
+            ]
+        }
     },
     "dependencies": {
-        "@chakra-ui/react": "^1.8.8",
+        "@chakra-ui/react": "^2.2.1",
         "@emotion/react": "^11.9.0",
         "@emotion/styled": "^11.8.1",
         "@fontsource/rajdhani": "^4.5.8",
@@ -34,6 +60,7 @@
         "husky": "^7.0.4",
         "lint-staged": "^12.4.0",
         "prettier": "2.6.2",
+        "svg-to-ts": "^8.8.1",
         "typescript": "4.6.3"
     }
 }

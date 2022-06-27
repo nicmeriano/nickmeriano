@@ -4,6 +4,11 @@ export const colors = {
     black: '#010409',
     white: '#FFFFFF',
 
+    text: {
+        primary: 'var(--chakra-colors-gray-200)',
+        secondary: 'var(--chakra-colors-gray-400)'
+    },
+
     gray: {
         50: '#fafafa',
         100: '#f4f4f5',
