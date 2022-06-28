@@ -11,9 +11,13 @@ import '@fontsource/source-sans-pro/700.css';
 import { useEffect } from 'react';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-    // Reset scroll to prevent wrong section from being highlighted in nav when refreshing the page from an anchor point
     useEffect(() => {
+        // Reset scroll to top on refresh
         window.history.scrollRestoration = 'manual';
+        // HACK: Prevent autoscroll when section has is present in the URL on first load (messes with intro animation)
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        });
     }, []);
     return (
         <ChakraProvider theme={theme}>

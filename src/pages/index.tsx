@@ -7,6 +7,7 @@ import {
     GridItem,
     Heading,
     HStack,
+    keyframes,
     Link,
     Stack,
     Tab,
@@ -22,6 +23,37 @@ import { Icon } from 'components';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { FC, ReactNode, useEffect, useState } from 'react';
+
+const shrinkIn = keyframes`
+    from {
+        transform: scale(1.1);
+        opacity: 0;
+        
+    }
+    
+    
+    to {
+        transform: scale(1);
+        opacity: 1;
+        
+    }
+`;
+const enter = keyframes`
+    from {
+       
+        transform: matrix3d(.95, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        opacity: 0;
+        
+    }
+    
+    
+    to {
+        
+        transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        opacity: 1;
+        
+    }
+`;
 
 type Project = {
     name: string;
@@ -181,37 +213,130 @@ const Home: NextPage = () => {
 
     return (
         <>
-            {/* <Box
+            <Box
                 position="fixed"
-                width="full"
-                top="-8"
+                top="0"
                 left="0"
-                height="10vh"
-                transition="opacity 300ms, transform 300ms"
-                opacity={isScrolled ? 0 : 0.8}
-                transform={isScrolled ? 'translateY(-100%)' : 'rotate(0)'}
-                borderBottom="2px solid"
-                borderColor="gray.800"
-                // bg="teal.600"
-            ></Box> */}
-            {/* <Box
-                position="fixed"
-                width="full"
-                bottom="0"
-                left="0"
-                height="24"
-                transition="opacity 300ms, transform 300ms"
-                opacity={isScrolled ? 0 : 0.8}
-                transform={isScrolled ? 'translateY(100%)' : 'rotate(0)'}
-                // borderTop="2px solid"
-                // borderColor="gray.800"
-                // bg="teal.600"
-                display="grid"
-                alignContent="center"
-                justifyContent="center"
+                w="full"
+                h="full"
+                display="flex"
+                transition="transform 400ms ease, opacity 300ms ease"
+                transform={isScrolled ? 'scale(1.03)' : ''}
+                opacity={isScrolled ? 0 : 1}
+                animation={`${shrinkIn} 800ms ease-out`}
             >
-                <Icon name="chevron-down" size="xl" animation={`${float} 3s infinite`} color="teal.500"/>
-            </Box> */}
+                <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    margin="auto"
+                    w="calc(100vw - 10%)"
+                    h="calc(100vh - 10%)"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    zIndex="-1"
+                >
+                    <svg
+                        height="100%"
+                        width="100%"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ borderRadius: '40px' }}
+                    >
+                        <rect
+                            width="100%"
+                            height="100%"
+                            stroke="url(#gradient)"
+                            strokeWidth="3"
+                            fill="var(--chakra-colors-gray-900)"
+                            rx="40"
+                        />
+
+                        <defs>
+                            <linearGradient
+                                id="gradient"
+                                x1="4.5"
+                                y1="19.5"
+                                x2="4.5"
+                                y2="180.836"
+                                gradientUnits="userSpaceOnUse"
+                            >
+                                <stop>
+                                    <animate
+                                        attributeName="stop-color"
+                                        dur="10s"
+                                        repeatCount="indefinite"
+                                        values="#fe00f2;#3ffe00;#fe00f2;"
+                                    />
+                                </stop>
+                                <stop offset="1">
+                                    <animate
+                                        attributeName="stop-color"
+                                        dur="10s"
+                                        repeatCount="indefinite"
+                                        values="#fb0280;#02fbb0;#fb0280"
+                                    />
+                                </stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </Box>
+                <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    margin="auto"
+                    w="calc(100vw - 10%)"
+                    h="calc(100vh - 10%)"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    filter="blur(20px)"
+                    zIndex="-2"
+                >
+                    <svg
+                        height="100%"
+                        width="100%"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ borderRadius: '40px' }}
+                    >
+                        <rect width="100%" height="100%" fill="url(#gradient)" rx="40" />
+                        <defs>
+                            <linearGradient
+                                id="gradient"
+                                x1="4.5"
+                                y1="19.5"
+                                x2="4.5"
+                                y2="180.836"
+                                gradientUnits="userSpaceOnUse"
+                            >
+                                <stop>
+                                    <animate
+                                        attributeName="stop-color"
+                                        dur="10s"
+                                        repeatCount="indefinite"
+                                        values="#fe00f2;#3ffe00;#fe00f2;"
+                                    />
+                                </stop>
+                                <stop offset="1">
+                                    <animate
+                                        attributeName="stop-color"
+                                        dur="10s"
+                                        repeatCount="indefinite"
+                                        values="#fb0280;#02fbb0;#fb0280"
+                                    />
+                                </stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </Box>
+            </Box>
 
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
             <Box id="header" position="fixed" width="full" h="24px"></Box>
@@ -245,6 +370,7 @@ const Home: NextPage = () => {
                 maxWidth={{ base: 'lg', lg: '5xl' }}
                 pt="30vh"
                 gap="6"
+                animation={`${enter} 3000ms ease-out`}
             >
                 <GridItem width="100%" height="100%" gridArea="sidenav" display={{ base: 'none', lg: 'block' }} pl="6">
                     <VStack alignItems="end" position="sticky" p="2" top="12">
@@ -279,7 +405,7 @@ const Home: NextPage = () => {
                         maxWidth="lg"
                         direction={{ base: 'column-reverse', sm: 'row' }}
                     >
-                        <Box as="section" mb="32">
+                        <Box as="section" mb="32" zIndex="base">
                             <Text fontSize="lg" mb="2">
                                 Hi, I&apos;m
                             </Text>
