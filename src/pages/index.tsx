@@ -24,36 +24,70 @@ import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { FC, ReactNode, useEffect, useState } from 'react';
 
-const shrinkIn = keyframes`
-    from {
-        transform: scale(1.1);
-        opacity: 0;
-        
-    }
-    
-    
+const fadeIn = keyframes`
     to {
-        transform: scale(1);
         opacity: 1;
-        
     }
 `;
-const enter = keyframes`
+
+const slideIn = (dir: 'left' | 'right') => keyframes`
     from {
-       
-        transform: matrix3d(.95, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-        opacity: 0;
-        
+        transform: translateX(${dir === 'left' ? '-100%' : '100%'});
     }
-    
-    
     to {
-        
-        transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-        opacity: 1;
-        
+        transform: translateX(0);
     }
 `;
+
+function random(min: number, max: number) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+const particles = 10;
+const particleStyles = () => {
+    const styles: Record<string, any> = {};
+    const colors = ['teal.400', 'orange.400', 'purple.400', 'gray.300', 'pink.400'];
+
+    for (let i = 1; i <= particles; i++) {
+        const keyframe = keyframes`
+            0% {
+                transform: translate3d(var(--x1),var(--y1),var(--z1));
+                opacity: 0;
+            }
+
+            50% {
+                opacity: ${Math.min(Math.floor(Math.random() * 100) / 100, 0.4)};
+            }
+            
+            100% {
+                transform: translate3d(var(--x2),var(--y2),var(--z2));
+                opacity: 0; 
+            }
+        `;
+
+        const size = random(1, 10);
+
+        styles[`> div:nth-of-type(${i})`] = {
+            '--x1': `calc(${random(1, 90)} * 1vw)`,
+            '--y1': `calc(${random(1, 90)} * 1vh)`,
+            '--z1': `calc(${random(1, 100)} * 1px)`,
+            '--x2': `calc(${random(1, 90)} * 1vw)`,
+            '--y2': `calc(${random(1, 90)} * 1vh)`,
+            '--z2': `calc(${random(1, 100)} * 1px)`,
+            w: size,
+            h: size,
+            bg: colors[random(0, colors.length - 1)],
+            filter: `blur(${random(4, 20)}px)`,
+            transform: 'translate3d(var(--x1),var(--y1),var(--z1))',
+            opacity: 0,
+            animation: `${keyframe} 60s ${i * 0.8}s infinite`,
+            transition: 'background-color 300ms, filter 800ms, opacity 300ms'
+        };
+    }
+
+    return styles;
+};
 
 type Project = {
     name: string;
@@ -116,16 +150,16 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
                 minWidth={expanded ? '100%' : 0}
                 w="fit-content"
                 transition="min-width 250ms ease-in, background-color 300ms, transform 250ms ease-out"
-                bg={expanded ? (active ? 'teal.300' : 'transparent') : 'transparent'}
+                bg={expanded ? (active ? 'teal.300' : 'gray.900') : 'gray.900'}
                 color={expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary'}
                 fontWeight={active ? 'semibold' : 'medium'}
-                transform={active ? 'scale(1.03)' : ''}
                 lineHeight="none"
                 position="relative"
                 _hover={{
                     bg: active ? 'teal.300' : 'gray.800'
                 }}
                 data-navlink
+                animation={`${slideIn('right')} 1500ms   ease-out`}
             >
                 {children}
             </Link>
@@ -136,8 +170,10 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
 const Home: NextPage = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState<string>();
+    const [particleOverlayStyles, setParticleOverlayStyles] = useState<any>();
 
     useEffect(() => {
+        setParticleOverlayStyles(particleStyles());
         // Top scroll observer
         const anchor: HTMLElement | null = document.querySelector('#anchor');
 
@@ -219,125 +255,14 @@ const Home: NextPage = () => {
                 left="0"
                 w="full"
                 h="full"
-                display="flex"
-                transition="transform 400ms ease, opacity 300ms ease"
-                transform={isScrolled ? 'scale(1.03)' : ''}
+                sx={particleOverlayStyles}
                 opacity={isScrolled ? 0 : 1}
-                animation={`${shrinkIn} 800ms ease-out`}
+                transition="opacity 2s ease"
             >
-                <Box
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    right="0"
-                    bottom="0"
-                    margin="auto"
-                    w="calc(100vw - 10%)"
-                    h="calc(100vh - 10%)"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    zIndex="-1"
-                >
-                    <svg
-                        height="100%"
-                        width="100%"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ borderRadius: '40px' }}
-                    >
-                        <rect
-                            width="100%"
-                            height="100%"
-                            stroke="url(#gradient)"
-                            strokeWidth="3"
-                            fill="var(--chakra-colors-gray-900)"
-                            rx="40"
-                        />
-
-                        <defs>
-                            <linearGradient
-                                id="gradient"
-                                x1="4.5"
-                                y1="19.5"
-                                x2="4.5"
-                                y2="180.836"
-                                gradientUnits="userSpaceOnUse"
-                            >
-                                <stop>
-                                    <animate
-                                        attributeName="stop-color"
-                                        dur="10s"
-                                        repeatCount="indefinite"
-                                        values="#fe00f2;#3ffe00;#fe00f2;"
-                                    />
-                                </stop>
-                                <stop offset="1">
-                                    <animate
-                                        attributeName="stop-color"
-                                        dur="10s"
-                                        repeatCount="indefinite"
-                                        values="#fb0280;#02fbb0;#fb0280"
-                                    />
-                                </stop>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </Box>
-                <Box
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    right="0"
-                    bottom="0"
-                    margin="auto"
-                    w="calc(100vw - 10%)"
-                    h="calc(100vh - 10%)"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    filter="blur(20px)"
-                    zIndex="-2"
-                >
-                    <svg
-                        height="100%"
-                        width="100%"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ borderRadius: '40px' }}
-                    >
-                        <rect width="100%" height="100%" fill="url(#gradient)" rx="40" />
-                        <defs>
-                            <linearGradient
-                                id="gradient"
-                                x1="4.5"
-                                y1="19.5"
-                                x2="4.5"
-                                y2="180.836"
-                                gradientUnits="userSpaceOnUse"
-                            >
-                                <stop>
-                                    <animate
-                                        attributeName="stop-color"
-                                        dur="10s"
-                                        repeatCount="indefinite"
-                                        values="#fe00f2;#3ffe00;#fe00f2;"
-                                    />
-                                </stop>
-                                <stop offset="1">
-                                    <animate
-                                        attributeName="stop-color"
-                                        dur="10s"
-                                        repeatCount="indefinite"
-                                        values="#fb0280;#02fbb0;#fb0280"
-                                    />
-                                </stop>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </Box>
+                {[...Array(particles)].map((_, i) => (
+                    <Box borderRadius="full" position="absolute" key={i} padding="4"></Box>
+                ))}
             </Box>
-
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
             <Box id="header" position="fixed" width="full" h="24px"></Box>
             <Box
@@ -367,13 +292,29 @@ const Home: NextPage = () => {
                 gridTemplateColumns="1fr 2fr"
                 mx="auto"
                 width="full"
-                maxWidth={{ base: 'lg', lg: '5xl' }}
-                pt="30vh"
-                gap="6"
-                animation={`${enter} 3000ms ease-out`}
+                maxWidth={{ base: 'lg', md: '2xl', lg: '5xl' }}
+                pt={{ base: '10vh', sm: '30vh' }}
+                position="relative"
             >
-                <GridItem width="100%" height="100%" gridArea="sidenav" display={{ base: 'none', lg: 'block' }} pl="6">
-                    <VStack alignItems="end" position="sticky" p="2" top="12">
+                <GridItem
+                    width="100%"
+                    height="100%"
+                    gridArea="sidenav"
+                    display={{ base: 'none', lg: 'block' }}
+                    pl="6"
+                    style={{ contain: 'paint' }}
+                >
+                    <VStack
+                        alignItems="end"
+                        position="sticky"
+                        py="4"
+                        pr="6"
+                        top="14"
+                        borderRight="1px"
+                        borderColor={isScrolled ? 'transparent' : 'gray.800'}
+                        overflow="hidden"
+                        transition="border-color 300ms"
+                    >
                         <NavLink
                             expanded={isScrolled}
                             active={isScrolled && (!activeSection || activeSection === 'about')}
@@ -404,16 +345,17 @@ const Home: NextPage = () => {
                         gap="12"
                         maxWidth="lg"
                         direction={{ base: 'column-reverse', sm: 'row' }}
+                        overflowX="hidden"
                     >
-                        <Box as="section" mb="32" zIndex="base">
-                            <Text fontSize="lg" mb="2">
+                        <Box as="section" animation={` ${slideIn('left')} 1500ms ease-out`}>
+                            <Text fontSize={{ base: 'sm', md: 'lg' }} mb="2">
                                 Hi, I&apos;m
                             </Text>
                             <Heading size="2xl" whiteSpace="nowrap" mb="1">
                                 Nick Meriano
                             </Heading>
                             <Text
-                                fontSize="xl"
+                                fontSize={{ base: 'md', md: 'xl' }}
                                 whiteSpace="nowrap"
                                 color="text.secondary"
                                 sx={{ span: { color: 'text.primary' } }}
@@ -439,27 +381,64 @@ const Home: NextPage = () => {
                             </HStack>
                         </Box>
 
-                        <Avatar
-                            border="2px solid var(--chakra-colors-gray-300)"
-                            size={{ base: 'xl', md: '2xl' }}
-                            src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
-                        ></Avatar>
+                        <Box
+                            borderRadius="full"
+                            _hover={{
+                                '> :nth-child(1)': {
+                                    display: 'none'
+                                },
+                                '> :nth-child(2)': {
+                                    display: 'inline-block'
+                                }
+                            }}
+                            opacity="0"
+                            animation={` ${fadeIn} 1500ms 1.5s ease-out forwards`}
+                        >
+                            <Avatar
+                                border="2px solid var(--chakra-colors-gray-300)"
+                                size={{ base: 'xl', md: '2xl' }}
+                                src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
+                            ></Avatar>
+                            <Avatar
+                                border="2px solid var(--chakra-colors-gray-300)"
+                                size={{ base: 'xl', md: '2xl' }}
+                                src="https://avatars.githubusercontent.com/u/47791568?s=400&u=6762e302631a56b0f530f6f649fd6172caf650ba&v=4"
+                                display="none"
+                            ></Avatar>
+                        </Box>
                     </Stack>
                     <Box
                         as="section"
                         data-section="about"
                         opacity={isScrolled ? 1 : 0}
+                        pointerEvents={isScrolled ? 'all' : 'none'}
                         transition="opacity 300ms"
                         fontSize="lg"
                         id="about"
-                        pt="8"
+                        pt="32"
                     >
-                        <Tabs colorScheme="teal">
-                            <TabList mb="6" borderColor="gray.800">
-                                <Tab>Intro</Tab>
-                                <Tab>Tech Stack</Tab>
-                                <Tab>Hobbies</Tab>
-                            </TabList>
+                        <Tabs colorScheme="gray" variant="solid-rounded" size={{ base: 'sm', md: 'md' }}>
+                            <HStack align="center" spacing="0" justify="space-between" mb="4" wrap="wrap" gap="4">
+                                <Heading size="lg" whiteSpace="nowrap" mr="8">
+                                    About Me
+                                </Heading>
+                                <TabList
+                                    mb="6"
+                                    flex={[1, 'unset']}
+                                    sx={{
+                                        '> button': {
+                                            color: 'text.secondary',
+                                            _selected: { bg: 'gray.800', color: 'gray.100' },
+                                            flex: [1, 'unset'],
+                                            whiteSpace: 'nowrap'
+                                        }
+                                    }}
+                                >
+                                    <Tab>Bio</Tab>
+                                    <Tab>Tech Stack</Tab>
+                                    <Tab>Hobbies</Tab>
+                                </TabList>
+                            </HStack>
                             <TabPanels minHeight="270px" color="text.secondary">
                                 <TabPanel px="0">
                                     <VStack alignItems="start" letterSpacing="wide">
@@ -475,7 +454,6 @@ const Home: NextPage = () => {
                                             Specialized in frontend development, I have an affinity for UI/UX design and
                                             am passionate about building applications for the web.
                                         </Text>
-                                        <Text pt="4">Welcome to my website!</Text>
                                     </VStack>
                                 </TabPanel>
                                 <TabPanel px="0">
@@ -544,14 +522,25 @@ const Home: NextPage = () => {
                         as="section"
                         data-section="projects"
                         opacity={isScrolled ? 1 : 0}
+                        pointerEvents={isScrolled ? 'all' : 'none'}
                         transition="opacity 300ms"
                         fontSize="lg"
                         pt="32"
                         id="projects"
                     >
+                        <Heading size="lg" mb="4">
+                            Projects
+                        </Heading>
+                        <Text mb="6" color="text.secondary">
+                            Here are a few things I&apos;ve worked on. You can find more on{' '}
+                            <Link isExternal href="https://github.com/nicmeriano">
+                                GitHub
+                            </Link>
+                            .
+                        </Text>
                         <VStack wrap="wrap" gap="2" spacing="0" role="group">
                             {projects.map((project) => (
-                                <Box
+                                <VStack
                                     key={project.name}
                                     p="10"
                                     w="full"
@@ -566,6 +555,8 @@ const Home: NextPage = () => {
                                     _hover={{
                                         opacity: '1 !important'
                                     }}
+                                    alignItems="start"
+                                    spacing="2"
                                 >
                                     <HStack>
                                         {project.stack.map((tech) => (
@@ -583,8 +574,10 @@ const Home: NextPage = () => {
                                     <Text fontSize="2xl" fontWeight="semibold">
                                         {project.name}
                                     </Text>
-                                    <Text fontSize="md">{project.description}</Text>
-                                </Box>
+                                    <Text fontSize="md" color="text.secondary">
+                                        {project.description}
+                                    </Text>
+                                </VStack>
                             ))}
                         </VStack>
                     </Box>
@@ -592,19 +585,21 @@ const Home: NextPage = () => {
                         as="section"
                         data-section="contact"
                         opacity={isScrolled ? 1 : 0}
+                        pointerEvents={isScrolled ? 'all' : 'none'}
                         transition="opacity 300ms"
                         fontSize="lg"
                         mb="48"
                         id="contact"
-                        pt="64"
+                        pt="32"
                     >
-                        <Heading mb="8" color="text.secondary" size="md">
+                        <Heading size="lg" mb="6">
+                            {' '}
                             Let&apos;s Connect
                         </Heading>
                         <VStack alignItems="start" letterSpacing="wide">
                             <Text color="text.secondary">
                                 Looking to hire a frontend engineer, chat about web development or just want to say hi?
-                                Whatever it is, shoot me an email at{' '}
+                                Whatever it is, feel free to shoot me an email at{' '}
                                 <Link href="mailto:nicmeriano@gmail.com">nicmeriano@gmail.com</Link> and I&apos;ll get
                                 back to you as soon as I can.
                             </Text>
