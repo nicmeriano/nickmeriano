@@ -93,7 +93,8 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
                 lineHeight="none"
                 position="relative"
                 _hover={{
-                    bg: active ? 'teal.300' : 'gray.800'
+                    bg: active ? 'teal.300' : 'gray.800',
+                    color: (expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary') + ' !important'
                 }}
                 data-navlink
                 animation={`${slideIn('right')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}
@@ -216,7 +217,7 @@ const Home: NextPage = () => {
                 mx="auto"
                 width="full"
                 maxWidth={{ base: 'lg', md: '2xl', lg: '5xl' }}
-                pt={{ base: '10vh', sm: '30vh' }}
+                pt={{ base: '10vh', lg: '30vh' }}
                 position="relative"
             >
                 <GridItem
@@ -270,7 +271,10 @@ const Home: NextPage = () => {
                         direction={{ base: 'column-reverse', sm: 'row' }}
                         overflowX="hidden"
                     >
-                        <Box as="section" animation={` ${slideIn('left')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}>
+                        <Box
+                            as="section"
+                            animation={{ base: '', lg: `${slideIn('left')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)` }}
+                        >
                             <Text fontSize={{ base: 'sm', md: 'lg' }} mb="2">
                                 Hi, I&apos;m
                             </Text>
@@ -314,7 +318,8 @@ const Home: NextPage = () => {
                                     display: 'inline-block'
                                 }
                             }}
-                            animation={` ${fadeIn} 1500ms 1s ease-out`}
+                            opacity={{ base: 1, lg: 0 }}
+                            animation={{ base: '', lg: ` ${fadeIn} 1s 1s ease-out forwards` }}
                         >
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
@@ -345,7 +350,7 @@ const Home: NextPage = () => {
                             id="about"
                             pt="16"
                         >
-                            <Tabs colorScheme="gray" variant="solid-rounded" size={{ base: 'sm', md: 'md' }}>
+                            <Tabs colorScheme="gray" variant="solid-rounded" size="md">
                                 <HStack align="center" spacing="0" justify="space-between" mb="4" wrap="wrap" gap="4">
                                     <Heading size="lg" whiteSpace="nowrap" mr="8">
                                         About Me
@@ -506,7 +511,7 @@ const Home: NextPage = () => {
                                         borderRadius="md"
                                         position="relative"
                                         _groupHover={{
-                                            opacity: '0.5'
+                                            opacity: { base: 1, lg: 0.5 }
                                         }}
                                         bg="gray.800"
                                         transition="transform 200ms ease-in-out, opacity 200ms"
@@ -523,6 +528,7 @@ const Home: NextPage = () => {
                                                     fontSize="xs"
                                                     fontWeight="semibold"
                                                     letterSpacing="widest"
+                                                    whiteSpace="nowrap"
                                                 >
                                                     {tech}
                                                 </Text>
