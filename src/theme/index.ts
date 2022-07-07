@@ -1,19 +1,19 @@
-import { ChakraTheme, ThemeConfig, ThemeDirection } from '@chakra-ui/react';
+import { ChakraTheme, extendTheme, ThemeConfig, ThemeDirection } from '@chakra-ui/react';
 import { foundations } from './foundations';
+import { components } from './components';
 import { styles } from './styles';
 
 const direction: ThemeDirection = 'ltr';
 
 const config: ThemeConfig = {
     useSystemColorMode: false,
-    initialColorMode: 'light',
-    cssVarPrefix: 'chakra'
+    initialColorMode: 'dark'
 };
 
-export const theme: ChakraTheme = {
+export const theme = extendTheme({
     direction,
     ...foundations,
-    components: {},
+    components,
     styles,
     config
-};
+});

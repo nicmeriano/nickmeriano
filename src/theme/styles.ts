@@ -2,13 +2,20 @@ import { mode, Styles } from '@chakra-ui/theme-tools';
 
 export const styles: Styles = {
     global: (props) => ({
+        html: {
+            scrollBehavior: 'smooth'
+        },
+        'html, body, #__next': {
+            height: '100%'
+        },
         body: {
             fontFamily: 'body',
-            color: mode('gray.800', 'whiteAlpha.900')(props),
-            bg: mode('white', 'gray.800')(props),
+            color: mode('gray.800', 'text.primary')(props),
+            bg: mode('white', 'gray.900')(props),
             transitionProperty: 'background-color',
             transitionDuration: 'normal',
-            lineHeight: 'base'
+            lineHeight: 'base',
+            overflowX: 'hidden'
         },
         '*::placeholder': {
             color: mode('gray.500', 'gray.200')(props)
