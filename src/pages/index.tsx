@@ -8,7 +8,6 @@ import {
     HStack,
     Link,
     Stack,
-    StackDivider,
     Tab,
     TabList,
     TabPanel,
@@ -18,39 +17,12 @@ import {
     Tooltip,
     VStack
 } from '@chakra-ui/react';
-import { Icon } from 'components';
+import { Icon, Project } from 'components';
+import { projects } from 'data';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { fadeIn, slideIn } from 'theme';
-
-type Project = {
-    name: string;
-    description: string;
-    stack: string[];
-    srcLink?: string;
-    demoLink?: string;
-    img: string;
-};
-
-const projects: Project[] = [
-    {
-        name: 'Ephesoft AI Lab',
-        description:
-            'Single page application used to demo machine learning models developed by Ephesoft for document extraction.',
-        stack: ['Angular'],
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    },
-    {
-        name: 'nickmeriano.com',
-        description: 'Personal portfolio website I designed and built.',
-        stack: ['NextJS', 'Chakra UI', 'Typescript'],
-        srcLink: 'https://www.google.com',
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    }
-];
 
 const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; active?: boolean }> = ({
     children,
@@ -482,65 +454,9 @@ const Home: NextPage = () => {
                                 </Link>
                                 .
                             </Text>
-                            <VStack wrap="wrap" spacing="3" role="group">
+                            <VStack spacing="3" role="group">
                                 {projects.map((project) => (
-                                    <Flex
-                                        direction="column"
-                                        gap="1"
-                                        key={project.name}
-                                        p="10"
-                                        w="full"
-                                        borderRadius="md"
-                                        position="relative"
-                                        _groupHover={{
-                                            opacity: { base: 1, lg: 0.5 }
-                                        }}
-                                        bg="gray.800"
-                                        transition="transform 200ms ease-in-out, opacity 200ms"
-                                        _hover={{
-                                            opacity: '1 !important'
-                                        }}
-                                        alignItems="start"
-                                    >
-                                        <HStack spacing="4">
-                                            {project.stack.map((tech) => (
-                                                <Text
-                                                    key={tech}
-                                                    textTransform="uppercase"
-                                                    fontSize="xs"
-                                                    fontWeight="semibold"
-                                                    letterSpacing="widest"
-                                                    whiteSpace="nowrap"
-                                                >
-                                                    {tech}
-                                                </Text>
-                                            ))}
-                                        </HStack>
-                                        <Text fontSize="2xl" fontWeight="semibold">
-                                            {project.name}
-                                        </Text>
-                                        <Text fontSize="md" color="text.secondary">
-                                            {project.description}
-                                        </Text>
-
-                                        <HStack
-                                            fontSize="md"
-                                            spacing="2"
-                                            mt="4"
-                                            divider={<StackDivider borderColor="gray.700" />}
-                                        >
-                                            {project.demoLink && (
-                                                <Link isExternal href={project.demoLink}>
-                                                    Live demo
-                                                </Link>
-                                            )}
-                                            {project.srcLink && (
-                                                <Link isExternal href={project.demoLink}>
-                                                    Source code
-                                                </Link>
-                                            )}
-                                        </HStack>
-                                    </Flex>
+                                    <Project project={project} key={project.name} />
                                 ))}
                             </VStack>
                         </Box>
