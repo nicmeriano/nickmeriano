@@ -25,6 +25,9 @@ import NextLink from 'next/link';
 import { FC, ReactNode, useEffect, useState } from 'react';
 
 const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
     to {
         opacity: 1;
     }
@@ -311,8 +314,7 @@ const Home: NextPage = () => {
                                     display: 'inline-block'
                                 }
                             }}
-                            opacity="0"
-                            animation={` ${fadeIn} 1500ms 1s ease-out forwards`}
+                            animation={` ${fadeIn} 1500ms 1s ease-out`}
                         >
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
