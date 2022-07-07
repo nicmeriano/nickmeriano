@@ -1,8 +1,7 @@
 import {
     Avatar,
-    Badge,
     Box,
-    Divider,
+    Flex,
     Grid,
     GridItem,
     Heading,
@@ -10,6 +9,7 @@ import {
     keyframes,
     Link,
     Stack,
+    StackDivider,
     Tab,
     TabList,
     TabPanel,
@@ -30,12 +30,12 @@ const fadeIn = keyframes`
     }
 `;
 
-const slideIn = (dir: 'left' | 'right') => keyframes`
+const slideIn = (dir: 'left' | 'right' | 'top') => keyframes`
     from {
-        transform: translateX(${dir === 'left' ? '-100%' : '100%'});
+        transform: translate3D(${dir === 'left' ? '-100%' : '100%'}, 0, 0);
     }
     to {
-        transform: translateX(0);
+        transform: translate3D(0, 0, 0);
     }
 `;
 
@@ -57,7 +57,7 @@ const particleStyles = () => {
             }
 
             50% {
-                opacity: ${Math.min(Math.floor(Math.random() * 100) / 100, 0.4)};
+                opacity: ${Math.min(Math.floor(Math.random() * 100) / 100, 0.5)};
             }
             
             100% {
@@ -81,7 +81,7 @@ const particleStyles = () => {
             filter: `blur(${random(4, 20)}px)`,
             transform: 'translate3d(var(--x1),var(--y1),var(--z1))',
             opacity: 0,
-            animation: `${keyframe} 60s ${i * 0.8}s infinite`,
+            animation: `${keyframe} 60s ${i * 0.2}s infinite`,
             transition: 'background-color 300ms, filter 800ms, opacity 300ms'
         };
     }
@@ -93,40 +93,24 @@ type Project = {
     name: string;
     description: string;
     stack: string[];
-    srcLink: string;
-    demoLink: string;
+    srcLink?: string;
+    demoLink?: string;
     img: string;
 };
 
 const projects: Project[] = [
     {
-        name: 'Project A',
-        description: 'Description for project A',
-        stack: ['NextJS', 'MongoDB', 'ChakraUI'],
-        srcLink: 'https://www.google.com',
+        name: 'Ephesoft AI Lab',
+        description:
+            'Single page application used to demo machine learning models developed by Ephesoft for document extraction.',
+        stack: ['Angular'],
         demoLink: 'https://www.google.com',
         img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
     },
     {
-        name: 'Project B',
-        description: 'Description for project A',
-        stack: ['NextJS', 'MongoDB', 'ChakraUI'],
-        srcLink: 'https://www.google.com',
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    },
-    {
-        name: 'Project C',
-        description: 'Description for project A',
-        stack: ['NextJS', 'MongoDB', 'ChakraUI'],
-        srcLink: 'https://www.google.com',
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    },
-    {
-        name: 'Project D',
-        description: 'Description for project A',
-        stack: ['NextJS', 'MongoDB', 'ChakraUI'],
+        name: 'nickmeriano.com',
+        description: 'Personal portfolio website I designed and built.',
+        stack: ['NextJS', 'Chakra UI', 'Typescript'],
         srcLink: 'https://www.google.com',
         demoLink: 'https://www.google.com',
         img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
@@ -159,7 +143,7 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
                     bg: active ? 'teal.300' : 'gray.800'
                 }}
                 data-navlink
-                animation={`${slideIn('right')} 1500ms   ease-out`}
+                animation={`${slideIn('right')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}
             >
                 {children}
             </Link>
@@ -275,6 +259,7 @@ const Home: NextPage = () => {
                 bg="linear-gradient(180deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
                 opacity={isScrolled ? '1' : '0'}
                 transition="opacity 300ms"
+                pointerEvents="none"
             ></Box>
             <Box
                 position="fixed"
@@ -286,6 +271,7 @@ const Home: NextPage = () => {
                 bg="linear-gradient(0deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
                 opacity={isScrolled ? '1' : '0'}
                 transition="opacity 300ms"
+                pointerEvents="none"
             ></Box>
             <Grid
                 gridTemplateAreas={{ base: `'main main'`, lg: `'sidenav main'` }}
@@ -338,7 +324,7 @@ const Home: NextPage = () => {
                         </NavLink>
                     </VStack>
                 </GridItem>
-                <GridItem w="full" h="full" p="6" pt="0" pb="60vh" gridArea="main">
+                <GridItem w="full" h="full" p="6" pt="0" pb="85vh" gridArea="main">
                     <Stack
                         justify="space-between"
                         align="start"
@@ -347,7 +333,7 @@ const Home: NextPage = () => {
                         direction={{ base: 'column-reverse', sm: 'row' }}
                         overflowX="hidden"
                     >
-                        <Box as="section" animation={` ${slideIn('left')} 1500ms ease-out`}>
+                        <Box as="section" animation={` ${slideIn('left')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}>
                             <Text fontSize={{ base: 'sm', md: 'lg' }} mb="2">
                                 Hi, I&apos;m
                             </Text>
@@ -407,204 +393,255 @@ const Home: NextPage = () => {
                             ></Avatar>
                         </Box>
                     </Stack>
-                    <Box
-                        as="section"
-                        data-section="about"
-                        opacity={isScrolled ? 1 : 0}
-                        pointerEvents={isScrolled ? 'all' : 'none'}
-                        transition="opacity 300ms"
-                        fontSize="lg"
-                        id="about"
-                        pt="32"
-                    >
-                        <Tabs colorScheme="gray" variant="solid-rounded" size={{ base: 'sm', md: 'md' }}>
-                            <HStack align="center" spacing="0" justify="space-between" mb="4" wrap="wrap" gap="4">
-                                <Heading size="lg" whiteSpace="nowrap" mr="8">
-                                    About Me
-                                </Heading>
-                                <TabList
-                                    mb="6"
-                                    flex={[1, 'unset']}
-                                    sx={{
-                                        '> button': {
-                                            color: 'text.secondary',
-                                            _selected: { bg: 'gray.800', color: 'gray.100' },
-                                            flex: [1, 'unset'],
-                                            whiteSpace: 'nowrap'
-                                        }
-                                    }}
-                                >
-                                    <Tab>Bio</Tab>
-                                    <Tab>Tech Stack</Tab>
-                                    <Tab>Hobbies</Tab>
-                                </TabList>
-                            </HStack>
-                            <TabPanels minHeight="270px" color="text.secondary">
-                                <TabPanel px="0">
-                                    <VStack alignItems="start" letterSpacing="wide">
-                                        <Text>
-                                            Hey, I&apos;m Nick. I&apos;m a software engineer at{' '}
-                                            <Link target="_blank" href="https://ephesoft.com">
-                                                Ephesoft
-                                            </Link>
-                                            , where my team is building the future of intelligent document processing
-                                            and automation.
-                                        </Text>
-                                        <Text>
-                                            Specialized in frontend development, I have an affinity for UI/UX design and
-                                            am passionate about building applications for the web.
-                                        </Text>
-                                    </VStack>
-                                </TabPanel>
-                                <TabPanel px="0">
-                                    <VStack alignItems="start">
-                                        <Text mb="6">
-                                            {' '}
-                                            Here&apos;s a (small) list of tools, languages and frameworks I frequently
-                                            use:
-                                        </Text>
 
-                                        <Divider borderColor="gray.700" />
-                                        <HStack w="full">
-                                            <Text flex="1">Frontend</Text>
-                                            <HStack justifyContent="end">
-                                                <Badge fontSize="sm">Angular</Badge>
-                                                <Badge fontSize="sm">Typescript</Badge>
-                                                <Badge fontSize="sm">RxJS</Badge>
-                                                <Badge fontSize="sm">HTML5</Badge>
-                                                <Badge fontSize="sm">CSS3</Badge>
-                                            </HStack>
-                                        </HStack>
-                                        <Divider borderColor="gray.700" />
-                                        <HStack w="full">
-                                            <Text flex="1">Backend</Text>
-                                            <HStack justifyContent="end">
-                                                <Badge fontSize="sm">NodeJS</Badge>
-                                                <Badge fontSize="sm">AWS</Badge>
-                                                <Badge fontSize="sm">Bitbucket Pipelines</Badge>
-                                            </HStack>
-                                        </HStack>
-                                        <Divider borderColor="gray.700" />
-
-                                        <HStack w="full">
-                                            <Text flex="1">Testing</Text>
-                                            <HStack justifyContent="end">
-                                                <Badge fontSize="sm">Cypress</Badge>
-                                                <Badge fontSize="sm">Jasmine</Badge>
-                                                <Badge fontSize="sm">Mocha</Badge>
-                                            </HStack>
-                                        </HStack>
-                                        <Divider borderColor="gray.700" />
-
-                                        <HStack w="full">
-                                            <Text flex="1">Tools & Other</Text>
-                                            <HStack justifyContent="end">
-                                                <Badge fontSize="sm">VS Code</Badge>
-                                                <Badge fontSize="sm">Figma</Badge>
-                                                <Badge fontSize="sm">Google</Badge>
-                                                <Badge fontSize="sm">New Relic</Badge>
-                                            </HStack>
-                                        </HStack>
-                                        <Divider borderColor="gray.700" />
-                                    </VStack>
-                                </TabPanel>
-                                <TabPanel px="0">
-                                    <Text>
-                                        When not in the office I&apos;me most likely to be found enjoying the outdoors,
-                                        whether that be hiking, playing tennis or at my favorite coffee shop down the
-                                        street.
-                                    </Text>
-                                </TabPanel>
-                            </TabPanels>
-                        </Tabs>
-                    </Box>
-                    <Box
-                        as="section"
-                        data-section="projects"
-                        opacity={isScrolled ? 1 : 0}
-                        pointerEvents={isScrolled ? 'all' : 'none'}
-                        transition="opacity 300ms"
-                        fontSize="lg"
-                        pt="32"
-                        id="projects"
-                    >
-                        <Heading size="lg" mb="4">
-                            Projects
-                        </Heading>
-                        <Text mb="6" color="text.secondary">
-                            Here are a few things I&apos;ve worked on. You can find more on{' '}
-                            <Link isExternal href="https://github.com/nicmeriano">
-                                GitHub
-                            </Link>
-                            .
-                        </Text>
-                        <VStack wrap="wrap" gap="2" spacing="0" role="group">
-                            {projects.map((project) => (
-                                <VStack
-                                    key={project.name}
-                                    p="10"
-                                    w="full"
-                                    borderRadius="md"
-                                    position="relative"
-                                    _groupHover={{
-                                        opacity: '0.5'
-                                    }}
-                                    bg="gray.800"
-                                    cursor="pointer"
-                                    transition="transform 200ms ease-in-out, opacity 200ms"
-                                    _hover={{
-                                        opacity: '1 !important'
-                                    }}
-                                    alignItems="start"
-                                    spacing="2"
-                                >
-                                    <HStack>
-                                        {project.stack.map((tech) => (
-                                            <Text
-                                                key={tech}
-                                                textTransform="uppercase"
-                                                fontSize="xs"
-                                                fontWeight="semibold"
-                                                letterSpacing="widest"
-                                            >
-                                                {tech}
+                    <VStack alignItems="start" spacing="32" mt="24">
+                        <Box
+                            as="section"
+                            data-section="about"
+                            opacity={isScrolled ? 1 : 0}
+                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            transition="opacity 300ms"
+                            fontSize="lg"
+                            id="about"
+                            pt="16"
+                        >
+                            <Tabs colorScheme="gray" variant="solid-rounded" size={{ base: 'sm', md: 'md' }}>
+                                <HStack align="center" spacing="0" justify="space-between" mb="4" wrap="wrap" gap="4">
+                                    <Heading size="lg" whiteSpace="nowrap" mr="8">
+                                        About Me
+                                    </Heading>
+                                    <TabList
+                                        mb="6"
+                                        flex={[1, 'unset']}
+                                        sx={{
+                                            '> button': {
+                                                color: 'text.secondary',
+                                                _selected: { bg: 'gray.800', color: 'gray.100' },
+                                                flex: [1, 'unset'],
+                                                whiteSpace: 'nowrap'
+                                            }
+                                        }}
+                                    >
+                                        <Tab>Bio</Tab>
+                                        <Tab>Tech Stack</Tab>
+                                        <Tab>Hobbies</Tab>
+                                    </TabList>
+                                </HStack>
+                                <TabPanels minHeight="275px" color="text.secondary">
+                                    <TabPanel px="0" pb="0">
+                                        <VStack alignItems="start">
+                                            <Text>
+                                                Hey, I&apos;m Nick. I&apos;m a software engineer at{' '}
+                                                <Link isExternal href="https://ephesoft.com">
+                                                    Ephesoft
+                                                </Link>
+                                                , where my team is building the future of intelligent document
+                                                processing and automation.
                                             </Text>
-                                        ))}
-                                    </HStack>
-                                    <Text fontSize="2xl" fontWeight="semibold">
-                                        {project.name}
-                                    </Text>
-                                    <Text fontSize="md" color="text.secondary">
-                                        {project.description}
-                                    </Text>
-                                </VStack>
-                            ))}
-                        </VStack>
-                    </Box>
-                    <Box
-                        as="section"
-                        data-section="contact"
-                        opacity={isScrolled ? 1 : 0}
-                        pointerEvents={isScrolled ? 'all' : 'none'}
-                        transition="opacity 300ms"
-                        fontSize="lg"
-                        mb="48"
-                        id="contact"
-                        pt="32"
-                    >
-                        <Heading size="lg" mb="6">
-                            {' '}
-                            Let&apos;s Connect
-                        </Heading>
-                        <VStack alignItems="start" letterSpacing="wide">
-                            <Text color="text.secondary">
-                                Looking to hire a frontend engineer, chat about web development or just want to say hi?
-                                Whatever it is, feel free to shoot me an email at{' '}
-                                <Link href="mailto:nicmeriano@gmail.com">nicmeriano@gmail.com</Link> and I&apos;ll get
-                                back to you as soon as I can.
+                                            <Text>
+                                                Specialized in frontend development, I have an affinity for UI/UX design
+                                                and am passionate about building scalable and accessible applications
+                                                for the web.
+                                            </Text>
+                                            <Text> Currently based in the Bay Area, CA.</Text>
+                                        </VStack>
+                                    </TabPanel>
+                                    <TabPanel px="0">
+                                        <VStack alignItems="start">
+                                            <Text>
+                                                The technologies that I typically use on a daily basis include{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Angular
+                                                </Link>
+                                                ,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    RxJS
+                                                </Link>
+                                                ,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Typescript
+                                                </Link>
+                                                ,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Figma
+                                                </Link>{' '}
+                                                and{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Storybook
+                                                </Link>
+                                                . I love{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Cypress
+                                                </Link>{' '}
+                                                for e2e testing and use{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Jasmine
+                                                </Link>{' '}
+                                                and{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Mocha
+                                                </Link>{' '}
+                                                for unit tests.
+                                            </Text>
+                                            <Text>
+                                                When it comes to the backend and infrastructure I&apos;m most familiar
+                                                with{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    NodeJS
+                                                </Link>
+                                                ,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    AWS
+                                                </Link>{' '}
+                                                (Lambda, S3, DynamoDB) and{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Bitbucket Pipelines
+                                                </Link>
+                                                .
+                                            </Text>
+                                            <Text>
+                                                Tooling wise I use{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    VS Code
+                                                </Link>
+                                                ,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Jira
+                                                </Link>{' '}
+                                                and most important of all,{' '}
+                                                <Link isExternal href="https://google.com">
+                                                    Google
+                                                </Link>
+                                                .
+                                            </Text>
+                                            <Text>
+                                                Outside of work I like to dabble in other technologies such as ReactJS
+                                                and ThreeJS.
+                                            </Text>
+                                        </VStack>
+                                    </TabPanel>
+                                    <TabPanel px="0">
+                                        <VStack alignItems="start">
+                                            <Text>
+                                                When not in the office I&apos;me most likely to be found enjoying the
+                                                outdoors, whether that be hiking, playing tennis or at my favorite
+                                                coffee shop down the street.
+                                            </Text>
+                                            <Text>
+                                                I&apos;m also big into travel and love visiting new places around the
+                                                world, some of my favorite being Portugal and the Netherlands.
+                                            </Text>
+                                        </VStack>
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
+                        </Box>
+                        <Box
+                            as="section"
+                            data-section="projects"
+                            opacity={isScrolled ? 1 : 0}
+                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            transition="opacity 300ms"
+                            fontSize="lg"
+                            pt="16"
+                            id="projects"
+                        >
+                            <Heading size="lg" mb="4">
+                                Projects
+                            </Heading>
+                            <Text mb="6" color="text.secondary">
+                                Here are a few things I&apos;ve worked on. You can find more on{' '}
+                                <Link isExternal href="https://github.com/nicmeriano">
+                                    GitHub
+                                </Link>
+                                .
                             </Text>
-                        </VStack>
-                    </Box>
+                            <VStack wrap="wrap" spacing="3" role="group">
+                                {projects.map((project) => (
+                                    <Flex
+                                        direction="column"
+                                        gap="1"
+                                        key={project.name}
+                                        p="10"
+                                        w="full"
+                                        borderRadius="md"
+                                        position="relative"
+                                        _groupHover={{
+                                            opacity: '0.5'
+                                        }}
+                                        bg="gray.800"
+                                        transition="transform 200ms ease-in-out, opacity 200ms"
+                                        _hover={{
+                                            opacity: '1 !important'
+                                        }}
+                                        alignItems="start"
+                                    >
+                                        <HStack spacing="4">
+                                            {project.stack.map((tech) => (
+                                                <Text
+                                                    key={tech}
+                                                    textTransform="uppercase"
+                                                    fontSize="xs"
+                                                    fontWeight="semibold"
+                                                    letterSpacing="widest"
+                                                >
+                                                    {tech}
+                                                </Text>
+                                            ))}
+                                        </HStack>
+                                        <Text fontSize="2xl" fontWeight="semibold">
+                                            {project.name}
+                                        </Text>
+                                        <Text fontSize="md" color="text.secondary">
+                                            {project.description}
+                                        </Text>
+
+                                        <HStack
+                                            fontSize="md"
+                                            spacing="2"
+                                            mt="4"
+                                            divider={<StackDivider borderColor="gray.700" />}
+                                        >
+                                            {project.demoLink && (
+                                                <Link isExternal href={project.demoLink}>
+                                                    Live demo
+                                                </Link>
+                                            )}
+                                            {project.srcLink && (
+                                                <Link isExternal href={project.demoLink}>
+                                                    Source code
+                                                </Link>
+                                            )}
+                                        </HStack>
+                                    </Flex>
+                                ))}
+                            </VStack>
+                        </Box>
+                        <Box
+                            as="section"
+                            data-section="contact"
+                            opacity={isScrolled ? 1 : 0}
+                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            transition="opacity 300ms"
+                            fontSize="lg"
+                            mb="48"
+                            id="contact"
+                            pt="16"
+                        >
+                            <Heading size="lg" mb="6">
+                                {' '}
+                                Let&apos;s Connect
+                            </Heading>
+                            <VStack alignItems="start" letterSpacing="wide">
+                                <Text color="text.secondary">
+                                    Looking to hire a frontend engineer, chat about web development or just want to say
+                                    hi? Whatever it is, feel free to shoot me an email at{' '}
+                                    <Link href="mailto:nicmeriano@gmail.com">nicmeriano@gmail.com</Link> and I&apos;ll
+                                    get back to you as soon as I can.
+                                </Text>
+                            </VStack>
+                        </Box>
+                    </VStack>
                 </GridItem>
             </Grid>
         </>
