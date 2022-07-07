@@ -6,7 +6,6 @@ import {
     GridItem,
     Heading,
     HStack,
-    keyframes,
     Link,
     Stack,
     StackDivider,
@@ -23,24 +22,7 @@ import { Icon } from 'components';
 import type { NextPage } from 'next';
 import NextLink from 'next/link';
 import { FC, ReactNode, useEffect, useState } from 'react';
-
-const fadeIn = keyframes`
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-`;
-
-const slideIn = (dir: 'left' | 'right' | 'top') => keyframes`
-    from {
-        transform: translate3D(${dir === 'left' ? '-100%' : '100%'}, 0, 0);
-    }
-    to {
-        transform: translate3D(0, 0, 0);
-    }
-`;
+import { fadeIn, slideIn } from 'theme';
 
 type Project = {
     name: string;
