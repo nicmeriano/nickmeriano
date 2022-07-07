@@ -39,56 +39,6 @@ const slideIn = (dir: 'left' | 'right' | 'top') => keyframes`
     }
 `;
 
-function random(min: number, max: number) {
-    // min and max included
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-const particles = 10;
-const particleStyles = () => {
-    const styles: Record<string, any> = {};
-    const colors = ['teal.400', 'orange.400', 'purple.400', 'gray.300', 'pink.400'];
-
-    for (let i = 1; i <= particles; i++) {
-        const keyframe = keyframes`
-            0% {
-                transform: translate3d(var(--x1),var(--y1),var(--z1));
-                opacity: 0;
-            }
-
-            50% {
-                opacity: ${Math.min(Math.floor(Math.random() * 100) / 100, 0.5)};
-            }
-            
-            100% {
-                transform: translate3d(var(--x2),var(--y2),var(--z2));
-                opacity: 0; 
-            }
-        `;
-
-        const size = random(1, 10);
-
-        styles[`> div:nth-of-type(${i})`] = {
-            '--x1': `calc(${random(1, 90)} * 1vw)`,
-            '--y1': `calc(${random(1, 90)} * 1vh)`,
-            '--z1': `calc(${random(1, 100)} * 1px)`,
-            '--x2': `calc(${random(1, 90)} * 1vw)`,
-            '--y2': `calc(${random(1, 90)} * 1vh)`,
-            '--z2': `calc(${random(1, 100)} * 1px)`,
-            w: size,
-            h: size,
-            bg: colors[random(0, colors.length - 1)],
-            filter: `blur(${random(4, 20)}px)`,
-            transform: 'translate3d(var(--x1),var(--y1),var(--z1))',
-            opacity: 0,
-            animation: `${keyframe} 60s ${i * 0.2}s infinite`,
-            transition: 'background-color 300ms, filter 800ms, opacity 300ms'
-        };
-    }
-
-    return styles;
-};
-
 type Project = {
     name: string;
     description: string;
@@ -154,10 +104,8 @@ const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; acti
 const Home: NextPage = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState<string>();
-    const [particleOverlayStyles, setParticleOverlayStyles] = useState<any>();
 
     useEffect(() => {
-        setParticleOverlayStyles(particleStyles());
         // Top scroll observer
         const anchor: HTMLElement | null = document.querySelector('#anchor');
 
@@ -233,20 +181,6 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Box
-                position="fixed"
-                top="0"
-                left="0"
-                w="full"
-                h="full"
-                sx={particleOverlayStyles}
-                opacity={isScrolled ? 0 : 1}
-                transition="opacity 2s ease"
-            >
-                {[...Array(particles)].map((_, i) => (
-                    <Box borderRadius="full" position="absolute" key={i} padding="4"></Box>
-                ))}
-            </Box>
             <Box id="anchor" position="absolute" width="full" top="0px"></Box>
             <Box id="header" position="fixed" width="full" h="24px"></Box>
             <Box
@@ -378,7 +312,7 @@ const Home: NextPage = () => {
                                 }
                             }}
                             opacity="0"
-                            animation={` ${fadeIn} 1500ms 1.5s ease-out forwards`}
+                            animation={` ${fadeIn} 1500ms 1s ease-out forwards`}
                         >
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
@@ -394,13 +328,17 @@ const Home: NextPage = () => {
                         </Box>
                     </Stack>
 
-                    <VStack alignItems="start" spacing="32" mt="24">
+                    <VStack
+                        alignItems="start"
+                        spacing="32"
+                        mt="24"
+                        opacity={{ base: 1, lg: isScrolled ? 1 : 0 }}
+                        transition="opacity 300ms"
+                    >
                         <Box
                             as="section"
                             data-section="about"
-                            opacity={isScrolled ? 1 : 0}
                             pointerEvents={isScrolled ? 'all' : 'none'}
-                            transition="opacity 300ms"
                             fontSize="lg"
                             id="about"
                             pt="16"
@@ -539,7 +477,6 @@ const Home: NextPage = () => {
                         <Box
                             as="section"
                             data-section="projects"
-                            opacity={isScrolled ? 1 : 0}
                             pointerEvents={isScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
@@ -620,7 +557,6 @@ const Home: NextPage = () => {
                         <Box
                             as="section"
                             data-section="contact"
-                            opacity={isScrolled ? 1 : 0}
                             pointerEvents={isScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
