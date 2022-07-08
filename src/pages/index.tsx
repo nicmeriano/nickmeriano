@@ -1,7 +1,6 @@
 import {
     Avatar,
     Box,
-    Flex,
     Grid,
     GridItem,
     Heading,
@@ -17,47 +16,11 @@ import {
     Tooltip,
     VStack
 } from '@chakra-ui/react';
-import { Icon, Project } from 'components';
+import { Icon, Project, SideNav } from 'components';
 import { projects } from 'data';
 import type { NextPage } from 'next';
-import NextLink from 'next/link';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fadeIn, slideIn } from 'theme';
-
-const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; active?: boolean }> = ({
-    children,
-    href = '#',
-    expanded = false,
-    active = false
-}) => {
-    return (
-        <NextLink passHref href={href}>
-            <Link
-                px="5"
-                py="3"
-                borderColor="gray.800"
-                border={`1px solid ${expanded ? 'transparent' : 'var(--chakra-colors-gray-800)'}`}
-                borderRadius="md"
-                minWidth={expanded ? '100%' : 0}
-                w="fit-content"
-                transition="min-width 250ms ease-in, background-color 300ms, transform 250ms ease-out"
-                bg={expanded ? (active ? 'teal.300' : 'gray.900') : 'gray.900'}
-                color={expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary'}
-                fontWeight={active ? 'semibold' : 'medium'}
-                lineHeight="none"
-                position="relative"
-                _hover={{
-                    bg: active ? 'teal.300' : 'gray.800',
-                    color: (expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary') + ' !important'
-                }}
-                data-navlink
-                animation={`${slideIn('right')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}
-            >
-                {children}
-            </Link>
-        </NextLink>
-    );
-};
 
 const Home: NextPage = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -182,39 +145,7 @@ const Home: NextPage = () => {
                     pl="6"
                     style={{ contain: 'paint' }}
                 >
-                    <VStack
-                        alignItems="end"
-                        position="sticky"
-                        py="4"
-                        pr="6"
-                        top="14"
-                        borderRight="1px"
-                        borderColor={isScrolled ? 'transparent' : 'gray.800'}
-                        overflow="hidden"
-                        transition="border-color 300ms"
-                    >
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && (!activeSection || activeSection === 'about')}
-                            href="#about"
-                        >
-                            About
-                        </NavLink>
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && activeSection === 'projects'}
-                            href="#projects"
-                        >
-                            Projects
-                        </NavLink>
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && activeSection === 'contact'}
-                            href="#contact"
-                        >
-                            Contact
-                        </NavLink>
-                    </VStack>
+                    <SideNav isExpanded={isScrolled} activeLink={activeSection} />
                 </GridItem>
                 <GridItem w="full" h="full" p="6" pt="0" pb="85vh" gridArea="main">
                     <Stack
