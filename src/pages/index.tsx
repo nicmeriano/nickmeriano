@@ -18,25 +18,16 @@ import {
 } from '@chakra-ui/react';
 import { Icon, Project, SideNav } from 'components';
 import { projects } from 'data';
+import { useIsWindowScrolled } from 'hooks';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { fadeIn, slideIn } from 'theme';
 
 const Home: NextPage = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState<string>();
+    const isWindowScrolled = useIsWindowScrolled();
 
     useEffect(() => {
-        // Top scroll observer
-        const anchor: HTMLElement | null = document.querySelector('#anchor');
-
-        const onScroll = () => {
-            setIsScrolled(window.scrollY > 0);
-        };
-        const scrollObserver = new IntersectionObserver(onScroll);
-
-        scrollObserver.observe(anchor as HTMLElement);
-
         // Section highlight observer
         const header: HTMLElement | null = document.querySelector('#header');
         const sections = Array.from(document.querySelectorAll('[data-section]'));
@@ -102,7 +93,6 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Box id="anchor" position="absolute" width="full" top="0px"></Box>
             <Box id="header" position="fixed" width="full" h="24px"></Box>
             <Box
                 position="fixed"
@@ -112,7 +102,7 @@ const Home: NextPage = () => {
                 width="full"
                 h="8"
                 bg="linear-gradient(180deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isScrolled ? '1' : '0'}
+                opacity={isWindowScrolled ? '1' : '0'}
                 transition="opacity 300ms"
                 pointerEvents="none"
             ></Box>
@@ -124,7 +114,7 @@ const Home: NextPage = () => {
                 width="full"
                 h="8"
                 bg="linear-gradient(0deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isScrolled ? '1' : '0'}
+                opacity={isWindowScrolled ? '1' : '0'}
                 transition="opacity 300ms"
                 pointerEvents="none"
             ></Box>
@@ -145,7 +135,7 @@ const Home: NextPage = () => {
                     pl="6"
                     style={{ contain: 'paint' }}
                 >
-                    <SideNav isExpanded={isScrolled} activeLink={activeSection} />
+                    <SideNav isExpanded={isWindowScrolled} activeLink={activeSection} />
                 </GridItem>
                 <GridItem w="full" h="full" p="6" pt="0" pb="85vh" gridArea="main">
                     <Stack
@@ -224,13 +214,13 @@ const Home: NextPage = () => {
                         alignItems="start"
                         spacing="32"
                         mt="24"
-                        opacity={{ base: 1, lg: isScrolled ? 1 : 0 }}
+                        opacity={{ base: 1, lg: isWindowScrolled ? 1 : 0 }}
                         transition="opacity 300ms"
                     >
                         <Box
                             as="section"
                             data-section="about"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             fontSize="lg"
                             id="about"
                             pt="16"
@@ -369,7 +359,7 @@ const Home: NextPage = () => {
                         <Box
                             as="section"
                             data-section="projects"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
                             pt="16"
@@ -394,7 +384,7 @@ const Home: NextPage = () => {
                         <Box
                             as="section"
                             data-section="contact"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
                             mb="48"
