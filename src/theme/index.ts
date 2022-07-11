@@ -17,3 +17,7 @@ export const theme = extendTheme({
     styles,
     config
 });
+
+export * from './animations';
+
+export default theme;

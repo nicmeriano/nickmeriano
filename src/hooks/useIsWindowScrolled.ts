@@ -13,7 +13,7 @@ export const useIsWindowScrolled = () => {
 
         scrollObserver.observe(target);
 
-        return () => scrollObserver.unobserve(target);
+        return () => scrollObserver.disconnect();
     }, []);
 
     return isScrolled;

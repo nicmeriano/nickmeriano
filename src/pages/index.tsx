@@ -18,82 +18,17 @@ import {
 } from '@chakra-ui/react';
 import { Icon, Project, SideNav } from 'components';
 import { projects } from 'data';
-import { useIsWindowScrolled } from 'hooks';
+import { useActiveNavLink, useIsWindowScrolled } from 'hooks';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { fadeIn, slideIn } from 'theme';
 
 const Home: NextPage = () => {
-    const [activeSection, setActiveSection] = useState<string>();
     const isWindowScrolled = useIsWindowScrolled();
-
-    useEffect(() => {
-        // Section highlight observer
-        const header: HTMLElement | null = document.querySelector('#header');
-        const sections = Array.from(document.querySelectorAll('[data-section]'));
-
-        if (!header) {
-            return;
-        }
-
-        let direction: 'up' | 'down' = 'down';
-        let prevYPosition = 0;
-
-        const getTargetSection = (entry: IntersectionObserverEntry) => {
-            const index = sections.findIndex((section) => section == entry.target);
-
-            if (index >= sections.length - 1) {
-                return entry.target;
-            } else {
-                return sections[index + 1];
-            }
-        };
-
-        const shouldUpdate = (entry: IntersectionObserverEntry) => {
-            if (direction === 'down' && !entry.isIntersecting) {
-                return true;
-            }
-
-            if (direction === 'up' && entry.isIntersecting) {
-                return true;
-            }
-
-            return false;
-        };
-
-        const onIntersect: IntersectionObserverCallback = (entries, observer) => {
-            entries.forEach((entry) => {
-                if (window.scrollY > prevYPosition) {
-                    direction = 'down';
-                } else {
-                    direction = 'up';
-                }
-
-                prevYPosition = window.scrollY;
-
-                const target = direction === 'down' ? getTargetSection(entry) : entry.target;
-
-                if (shouldUpdate(entry)) {
-                    const section = (target as HTMLElement).dataset.section;
-                    setActiveSection(window.scrollY > 0 ? section : 'about');
-                }
-            });
-        };
-        const options: IntersectionObserverInit = {
-            rootMargin: `${header.offsetHeight * -1}px`,
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver(onIntersect, options);
-
-        sections.forEach((section) => {
-            observer.observe(section);
-        });
-    }, []);
+    const activeSection = useActiveNavLink('[data-section]');
 
     return (
         <>
-            <Box id="header" position="fixed" width="full" h="24px"></Box>
             <Box
                 position="fixed"
                 zIndex="overlay"
@@ -270,35 +205,35 @@ const Home: NextPage = () => {
                                         <VStack alignItems="start">
                                             <Text>
                                                 The technologies that I typically use on a daily basis include{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://angular.io">
                                                     Angular
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://rxjs.dev">
                                                     RxJS
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://typescriptlang.org">
                                                     Typescript
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://figma.com">
                                                     Figma
                                                 </Link>{' '}
                                                 and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://storybook.js.org">
                                                     Storybook
                                                 </Link>
                                                 . I love{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://cypress.io">
                                                     Cypress
                                                 </Link>{' '}
                                                 for e2e testing and use{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://jasmine.github.io">
                                                     Jasmine
                                                 </Link>{' '}
                                                 and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://mochajs.org">
                                                     Mocha
                                                 </Link>{' '}
                                                 for unit tests.
@@ -306,26 +241,26 @@ const Home: NextPage = () => {
                                             <Text>
                                                 When it comes to the backend and infrastructure I&apos;m most familiar
                                                 with{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://nodejs.org">
                                                     NodeJS
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://aws.amazon.com">
                                                     AWS
                                                 </Link>{' '}
                                                 (Lambda, S3, DynamoDB) and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://bitbucket.org">
                                                     Bitbucket Pipelines
                                                 </Link>
                                                 .
                                             </Text>
                                             <Text>
                                                 Tooling wise I use{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://code.visualstudio.com">
                                                     VS Code
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://atlassian.com/software/jira">
                                                     Jira
                                                 </Link>{' '}
                                                 and most important of all,{' '}
