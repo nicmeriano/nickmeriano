@@ -16,11 +16,10 @@ import {
     Tooltip,
     VStack
 } from '@chakra-ui/react';
-import { Icon, Project, SideNav } from 'components';
+import { Icon, Project, ScrollBorder, SideNav } from 'components';
 import { projects } from 'data';
 import { useActiveNavLink, useIsWindowScrolled } from 'hooks';
 import type { NextPage } from 'next';
-import { useRef } from 'react';
 import { fadeIn, slideIn } from 'theme';
 
 const Home: NextPage = () => {
@@ -29,30 +28,7 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Box
-                position="fixed"
-                zIndex="overlay"
-                bottom="0"
-                left="0"
-                width="full"
-                h="8"
-                bg="linear-gradient(180deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isWindowScrolled ? '1' : '0'}
-                transition="opacity 300ms"
-                pointerEvents="none"
-            ></Box>
-            <Box
-                position="fixed"
-                zIndex="overlay"
-                top="0"
-                left="0"
-                width="full"
-                h="8"
-                bg="linear-gradient(0deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isWindowScrolled ? '1' : '0'}
-                transition="opacity 300ms"
-                pointerEvents="none"
-            ></Box>
+            <ScrollBorder isVisible={isWindowScrolled} />
             <Grid
                 gridTemplateAreas={{ base: `'main main'`, lg: `'sidenav main'` }}
                 gridTemplateColumns="1fr 2fr"
