@@ -278,7 +278,7 @@ const Home: NextPage = () => {
                                     <TabPanel px="0">
                                         <VStack alignItems="start">
                                             <Text>
-                                                When not in the office I&apos;me most likely to be found enjoying the
+                                                When not in the office I&apos;m most likely to be found enjoying the
                                                 outdoors, whether that be hiking, playing tennis or at my favorite
                                                 coffee shop down the street.
                                             </Text>
