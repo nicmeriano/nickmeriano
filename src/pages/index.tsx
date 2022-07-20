@@ -76,21 +76,17 @@ const Home: NextPage = () => {
                                 Software Engineer at <span>Ephesoft</span>
                             </Text>
                             <HStack mt="6" spacing="5">
-                                <Tooltip label="GitHub">
-                                    <Link isExternal href="https://github.com/nicmeriano" color="text.secondary">
-                                        <Icon name="github" />
-                                    </Link>
-                                </Tooltip>
-                                <Tooltip label="LinkedIn">
-                                    <Link isExternal href="https://linkedin.com" color="text.secondary">
-                                        <Icon name="linkedin" />
-                                    </Link>
-                                </Tooltip>
-                                <Tooltip label="Email">
-                                    <Link isExternal href="mailto:nicmeriano@gmail.com" color="text.secondary">
-                                        <Icon name="mail" />
-                                    </Link>
-                                </Tooltip>
+                                <Link isExternal href="https://github.com/nicmeriano" color="text.secondary">
+                                    <Icon name="github" />
+                                </Link>
+
+                                <Link isExternal href="https://linkedin.com" color="text.secondary">
+                                    <Icon name="linkedin" />
+                                </Link>
+
+                                <Link isExternal href="mailto:nicmeriano@gmail.com" color="text.secondary">
+                                    <Icon name="mail" />
+                                </Link>
                             </HStack>
                         </Box>
 
