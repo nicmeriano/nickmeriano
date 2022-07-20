@@ -13,7 +13,6 @@ import {
     TabPanels,
     Tabs,
     Text,
-    Tooltip,
     VStack
 } from '@chakra-ui/react';
 import { Icon, Project, ScrollBorder, SideNav } from 'components';
@@ -154,7 +153,7 @@ const Home: NextPage = () => {
                                         <Tab>Hobbies</Tab>
                                     </TabList>
                                 </HStack>
-                                <TabPanels minHeight="275px" color="text.secondary">
+                                <TabPanels minHeight="210px" color="text.secondary">
                                     <TabPanel px="0" pb="0">
                                         <VStack alignItems="start">
                                             <Text>
@@ -176,11 +175,11 @@ const Home: NextPage = () => {
                                     <TabPanel px="0">
                                         <VStack alignItems="start">
                                             <Text>
-                                                The technologies that I typically use on a daily basis include{' '}
+                                                As an{' '}
                                                 <Link isExternal href="https://angular.io">
                                                     Angular
-                                                </Link>
-                                                ,{' '}
+                                                </Link>{' '}
+                                                developer I make heavy use of{' '}
                                                 <Link isExternal href="https://rxjs.dev">
                                                     RxJS
                                                 </Link>
@@ -196,7 +195,7 @@ const Home: NextPage = () => {
                                                 <Link isExternal href="https://storybook.js.org">
                                                     Storybook
                                                 </Link>
-                                                . I love{' '}
+                                                . I typically reach for{' '}
                                                 <Link isExternal href="https://cypress.io">
                                                     Cypress
                                                 </Link>{' '}
@@ -211,10 +210,9 @@ const Home: NextPage = () => {
                                                 for unit tests.
                                             </Text>
                                             <Text>
-                                                When it comes to the backend and infrastructure I&apos;m most familiar
-                                                with{' '}
+                                                When it comes to the backend and infrastructure I currently work with{' '}
                                                 <Link isExternal href="https://nodejs.org">
-                                                    NodeJS
+                                                    Node.js
                                                 </Link>
                                                 ,{' '}
                                                 <Link isExternal href="https://aws.amazon.com">
@@ -227,7 +225,7 @@ const Home: NextPage = () => {
                                                 .
                                             </Text>
                                             <Text>
-                                                Tooling wise I use{' '}
+                                                Tooling-wise I use{' '}
                                                 <Link isExternal href="https://code.visualstudio.com">
                                                     VS Code
                                                 </Link>
@@ -240,10 +238,6 @@ const Home: NextPage = () => {
                                                     Google
                                                 </Link>
                                                 .
-                                            </Text>
-                                            <Text>
-                                                Outside of work I like to dabble in other technologies such as ReactJS
-                                                and ThreeJS.
                                             </Text>
                                         </VStack>
                                     </TabPanel>
