@@ -1,15 +1,12 @@
 import {
     Avatar,
     Box,
-    Flex,
     Grid,
     GridItem,
     Heading,
     HStack,
-    keyframes,
     Link,
     Stack,
-    StackDivider,
     Tab,
     TabList,
     TabPanel,
@@ -19,198 +16,19 @@ import {
     Tooltip,
     VStack
 } from '@chakra-ui/react';
-import { Icon } from 'components';
+import { Icon, Project, ScrollBorder, SideNav } from 'components';
+import { projects } from 'data';
+import { useActiveNavLink, useIsWindowScrolled } from 'hooks';
 import type { NextPage } from 'next';
-import NextLink from 'next/link';
-import { FC, ReactNode, useEffect, useState } from 'react';
-
-const fadeIn = keyframes`
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-`;
-
-const slideIn = (dir: 'left' | 'right' | 'top') => keyframes`
-    from {
-        transform: translate3D(${dir === 'left' ? '-100%' : '100%'}, 0, 0);
-    }
-    to {
-        transform: translate3D(0, 0, 0);
-    }
-`;
-
-type Project = {
-    name: string;
-    description: string;
-    stack: string[];
-    srcLink?: string;
-    demoLink?: string;
-    img: string;
-};
-
-const projects: Project[] = [
-    {
-        name: 'Ephesoft AI Lab',
-        description:
-            'Single page application used to demo machine learning models developed by Ephesoft for document extraction.',
-        stack: ['Angular'],
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    },
-    {
-        name: 'nickmeriano.com',
-        description: 'Personal portfolio website I designed and built.',
-        stack: ['NextJS', 'Chakra UI', 'Typescript'],
-        srcLink: 'https://www.google.com',
-        demoLink: 'https://www.google.com',
-        img: 'https://cdn.dribbble.com/userupload/2936723/file/original-e229cd37622c465195b21829a6761e48.jpg?compress=1&resize=1504x1128'
-    }
-];
-
-const NavLink: FC<{ children: ReactNode; href?: string; expanded?: boolean; active?: boolean }> = ({
-    children,
-    href = '#',
-    expanded = false,
-    active = false
-}) => {
-    return (
-        <NextLink passHref href={href}>
-            <Link
-                px="5"
-                py="3"
-                borderColor="gray.800"
-                border={`1px solid ${expanded ? 'transparent' : 'var(--chakra-colors-gray-800)'}`}
-                borderRadius="md"
-                minWidth={expanded ? '100%' : 0}
-                w="fit-content"
-                transition="min-width 250ms ease-in, background-color 300ms, transform 250ms ease-out"
-                bg={expanded ? (active ? 'teal.300' : 'gray.900') : 'gray.900'}
-                color={expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary'}
-                fontWeight={active ? 'semibold' : 'medium'}
-                lineHeight="none"
-                position="relative"
-                _hover={{
-                    bg: active ? 'teal.300' : 'gray.800',
-                    color: (expanded ? (active ? 'teal.900' : 'text.secondary') : 'text.secondary') + ' !important'
-                }}
-                data-navlink
-                animation={`${slideIn('right')} 1500ms cubic-bezier(0.15, 1, 0.3, 1)`}
-            >
-                {children}
-            </Link>
-        </NextLink>
-    );
-};
+import { fadeIn, slideIn } from 'theme';
 
 const Home: NextPage = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [activeSection, setActiveSection] = useState<string>();
-
-    useEffect(() => {
-        // Top scroll observer
-        const anchor: HTMLElement | null = document.querySelector('#anchor');
-
-        const onScroll = () => {
-            setIsScrolled(window.scrollY > 0);
-        };
-        const scrollObserver = new IntersectionObserver(onScroll);
-
-        scrollObserver.observe(anchor as HTMLElement);
-
-        // Section highlight observer
-        const header: HTMLElement | null = document.querySelector('#header');
-        const sections = Array.from(document.querySelectorAll('[data-section]'));
-
-        if (!header) {
-            return;
-        }
-
-        let direction: 'up' | 'down' = 'down';
-        let prevYPosition = 0;
-
-        const getTargetSection = (entry: IntersectionObserverEntry) => {
-            const index = sections.findIndex((section) => section == entry.target);
-
-            if (index >= sections.length - 1) {
-                return entry.target;
-            } else {
-                return sections[index + 1];
-            }
-        };
-
-        const shouldUpdate = (entry: IntersectionObserverEntry) => {
-            if (direction === 'down' && !entry.isIntersecting) {
-                return true;
-            }
-
-            if (direction === 'up' && entry.isIntersecting) {
-                return true;
-            }
-
-            return false;
-        };
-
-        const onIntersect: IntersectionObserverCallback = (entries, observer) => {
-            entries.forEach((entry) => {
-                if (window.scrollY > prevYPosition) {
-                    direction = 'down';
-                } else {
-                    direction = 'up';
-                }
-
-                prevYPosition = window.scrollY;
-
-                const target = direction === 'down' ? getTargetSection(entry) : entry.target;
-
-                if (shouldUpdate(entry)) {
-                    const section = (target as HTMLElement).dataset.section;
-                    setActiveSection(window.scrollY > 0 ? section : 'about');
-                }
-            });
-        };
-        const options: IntersectionObserverInit = {
-            rootMargin: `${header.offsetHeight * -1}px`,
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver(onIntersect, options);
-
-        sections.forEach((section) => {
-            observer.observe(section);
-        });
-    }, []);
+    const isWindowScrolled = useIsWindowScrolled();
+    const activeSection = useActiveNavLink('[data-section]');
 
     return (
         <>
-            <Box id="anchor" position="absolute" width="full" top="0px"></Box>
-            <Box id="header" position="fixed" width="full" h="24px"></Box>
-            <Box
-                position="fixed"
-                zIndex="overlay"
-                bottom="0"
-                left="0"
-                width="full"
-                h="8"
-                bg="linear-gradient(180deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isScrolled ? '1' : '0'}
-                transition="opacity 300ms"
-                pointerEvents="none"
-            ></Box>
-            <Box
-                position="fixed"
-                zIndex="overlay"
-                top="0"
-                left="0"
-                width="full"
-                h="8"
-                bg="linear-gradient(0deg,hsla(0,0%,8%,0), var(--chakra-colors-gray-900))"
-                opacity={isScrolled ? '1' : '0'}
-                transition="opacity 300ms"
-                pointerEvents="none"
-            ></Box>
+            <ScrollBorder isVisible={isWindowScrolled} />
             <Grid
                 gridTemplateAreas={{ base: `'main main'`, lg: `'sidenav main'` }}
                 gridTemplateColumns="1fr 2fr"
@@ -228,39 +46,7 @@ const Home: NextPage = () => {
                     pl="6"
                     style={{ contain: 'paint' }}
                 >
-                    <VStack
-                        alignItems="end"
-                        position="sticky"
-                        py="4"
-                        pr="6"
-                        top="14"
-                        borderRight="1px"
-                        borderColor={isScrolled ? 'transparent' : 'gray.800'}
-                        overflow="hidden"
-                        transition="border-color 300ms"
-                    >
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && (!activeSection || activeSection === 'about')}
-                            href="#about"
-                        >
-                            About
-                        </NavLink>
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && activeSection === 'projects'}
-                            href="#projects"
-                        >
-                            Projects
-                        </NavLink>
-                        <NavLink
-                            expanded={isScrolled}
-                            active={isScrolled && activeSection === 'contact'}
-                            href="#contact"
-                        >
-                            Contact
-                        </NavLink>
-                    </VStack>
+                    <SideNav isExpanded={isWindowScrolled} activeLink={activeSection} />
                 </GridItem>
                 <GridItem w="full" h="full" p="6" pt="0" pb="85vh" gridArea="main">
                     <Stack
@@ -339,13 +125,13 @@ const Home: NextPage = () => {
                         alignItems="start"
                         spacing="32"
                         mt="24"
-                        opacity={{ base: 1, lg: isScrolled ? 1 : 0 }}
+                        opacity={{ base: 1, lg: isWindowScrolled ? 1 : 0 }}
                         transition="opacity 300ms"
                     >
                         <Box
                             as="section"
                             data-section="about"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             fontSize="lg"
                             id="about"
                             pt="16"
@@ -395,35 +181,35 @@ const Home: NextPage = () => {
                                         <VStack alignItems="start">
                                             <Text>
                                                 The technologies that I typically use on a daily basis include{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://angular.io">
                                                     Angular
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://rxjs.dev">
                                                     RxJS
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://typescriptlang.org">
                                                     Typescript
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://figma.com">
                                                     Figma
                                                 </Link>{' '}
                                                 and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://storybook.js.org">
                                                     Storybook
                                                 </Link>
                                                 . I love{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://cypress.io">
                                                     Cypress
                                                 </Link>{' '}
                                                 for e2e testing and use{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://jasmine.github.io">
                                                     Jasmine
                                                 </Link>{' '}
                                                 and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://mochajs.org">
                                                     Mocha
                                                 </Link>{' '}
                                                 for unit tests.
@@ -431,26 +217,26 @@ const Home: NextPage = () => {
                                             <Text>
                                                 When it comes to the backend and infrastructure I&apos;m most familiar
                                                 with{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://nodejs.org">
                                                     NodeJS
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://aws.amazon.com">
                                                     AWS
                                                 </Link>{' '}
                                                 (Lambda, S3, DynamoDB) and{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://bitbucket.org">
                                                     Bitbucket Pipelines
                                                 </Link>
                                                 .
                                             </Text>
                                             <Text>
                                                 Tooling wise I use{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://code.visualstudio.com">
                                                     VS Code
                                                 </Link>
                                                 ,{' '}
-                                                <Link isExternal href="https://google.com">
+                                                <Link isExternal href="https://atlassian.com/software/jira">
                                                     Jira
                                                 </Link>{' '}
                                                 and most important of all,{' '}
@@ -468,7 +254,7 @@ const Home: NextPage = () => {
                                     <TabPanel px="0">
                                         <VStack alignItems="start">
                                             <Text>
-                                                When not in the office I&apos;me most likely to be found enjoying the
+                                                When not in the office I&apos;m most likely to be found enjoying the
                                                 outdoors, whether that be hiking, playing tennis or at my favorite
                                                 coffee shop down the street.
                                             </Text>
@@ -484,7 +270,7 @@ const Home: NextPage = () => {
                         <Box
                             as="section"
                             data-section="projects"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
                             pt="16"
@@ -500,72 +286,16 @@ const Home: NextPage = () => {
                                 </Link>
                                 .
                             </Text>
-                            <VStack wrap="wrap" spacing="3" role="group">
+                            <VStack spacing="3" role="group">
                                 {projects.map((project) => (
-                                    <Flex
-                                        direction="column"
-                                        gap="1"
-                                        key={project.name}
-                                        p="10"
-                                        w="full"
-                                        borderRadius="md"
-                                        position="relative"
-                                        _groupHover={{
-                                            opacity: { base: 1, lg: 0.5 }
-                                        }}
-                                        bg="gray.800"
-                                        transition="transform 200ms ease-in-out, opacity 200ms"
-                                        _hover={{
-                                            opacity: '1 !important'
-                                        }}
-                                        alignItems="start"
-                                    >
-                                        <HStack spacing="4">
-                                            {project.stack.map((tech) => (
-                                                <Text
-                                                    key={tech}
-                                                    textTransform="uppercase"
-                                                    fontSize="xs"
-                                                    fontWeight="semibold"
-                                                    letterSpacing="widest"
-                                                    whiteSpace="nowrap"
-                                                >
-                                                    {tech}
-                                                </Text>
-                                            ))}
-                                        </HStack>
-                                        <Text fontSize="2xl" fontWeight="semibold">
-                                            {project.name}
-                                        </Text>
-                                        <Text fontSize="md" color="text.secondary">
-                                            {project.description}
-                                        </Text>
-
-                                        <HStack
-                                            fontSize="md"
-                                            spacing="2"
-                                            mt="4"
-                                            divider={<StackDivider borderColor="gray.700" />}
-                                        >
-                                            {project.demoLink && (
-                                                <Link isExternal href={project.demoLink}>
-                                                    Live demo
-                                                </Link>
-                                            )}
-                                            {project.srcLink && (
-                                                <Link isExternal href={project.demoLink}>
-                                                    Source code
-                                                </Link>
-                                            )}
-                                        </HStack>
-                                    </Flex>
+                                    <Project project={project} key={project.name} />
                                 ))}
                             </VStack>
                         </Box>
                         <Box
                             as="section"
                             data-section="contact"
-                            pointerEvents={isScrolled ? 'all' : 'none'}
+                            pointerEvents={isWindowScrolled ? 'all' : 'none'}
                             transition="opacity 300ms"
                             fontSize="lg"
                             mb="48"
