@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import icons from './icons/icons';
 
 export function Icon(props: PropsWithChildren<ThemingProps & BoxProps & { name: keyof typeof icons }>) {
-    const { variant, children, name, size, ...rest } = props;
+    const { variant, name, size, ...rest } = props;
 
     const styles = useStyleConfig('Icon', { variant, size });
 
