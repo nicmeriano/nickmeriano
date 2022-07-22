@@ -13,7 +13,6 @@ import {
     TabPanels,
     Tabs,
     Text,
-    Tooltip,
     VStack
 } from '@chakra-ui/react';
 import { Icon, Project, ScrollBorder, SideNav } from 'components';
@@ -76,21 +75,17 @@ const Home: NextPage = () => {
                                 Software Engineer at <span>Ephesoft</span>
                             </Text>
                             <HStack mt="6" spacing="5">
-                                <Tooltip label="GitHub">
-                                    <Link isExternal href="https://github.com/nicmeriano" color="text.secondary">
-                                        <Icon name="github" />
-                                    </Link>
-                                </Tooltip>
-                                <Tooltip label="LinkedIn">
-                                    <Link isExternal href="https://linkedin.com" color="text.secondary">
-                                        <Icon name="linkedin" />
-                                    </Link>
-                                </Tooltip>
-                                <Tooltip label="Email">
-                                    <Link isExternal href="mailto:nicmeriano@gmail.com" color="text.secondary">
-                                        <Icon name="mail" />
-                                    </Link>
-                                </Tooltip>
+                                <Link isExternal href="https://github.com/nicmeriano" color="text.secondary">
+                                    <Icon name="github" />
+                                </Link>
+
+                                <Link isExternal href="https://linkedin.com" color="text.secondary">
+                                    <Icon name="linkedin" />
+                                </Link>
+
+                                <Link isExternal href="mailto:nicmeriano@gmail.com" color="text.secondary">
+                                    <Icon name="mail" />
+                                </Link>
                             </HStack>
                         </Box>
 
@@ -110,12 +105,12 @@ const Home: NextPage = () => {
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
                                 size={{ base: 'xl', md: '2xl' }}
-                                src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
+                                src="images/profile-img.png"
                             ></Avatar>
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
                                 size={{ base: 'xl', md: '2xl' }}
-                                src="https://avatars.githubusercontent.com/u/47791568?s=400&u=6762e302631a56b0f530f6f649fd6172caf650ba&v=4"
+                                src="images/profile-img-2.jpg"
                                 display="none"
                             ></Avatar>
                         </Box>
@@ -158,7 +153,7 @@ const Home: NextPage = () => {
                                         <Tab>Hobbies</Tab>
                                     </TabList>
                                 </HStack>
-                                <TabPanels minHeight="275px" color="text.secondary">
+                                <TabPanels minHeight="210px" color="text.secondary">
                                     <TabPanel px="0" pb="0">
                                         <VStack alignItems="start">
                                             <Text>
@@ -180,11 +175,11 @@ const Home: NextPage = () => {
                                     <TabPanel px="0">
                                         <VStack alignItems="start">
                                             <Text>
-                                                The technologies that I typically use on a daily basis include{' '}
+                                                As an{' '}
                                                 <Link isExternal href="https://angular.io">
                                                     Angular
-                                                </Link>
-                                                ,{' '}
+                                                </Link>{' '}
+                                                developer I make heavy use of{' '}
                                                 <Link isExternal href="https://rxjs.dev">
                                                     RxJS
                                                 </Link>
@@ -200,7 +195,7 @@ const Home: NextPage = () => {
                                                 <Link isExternal href="https://storybook.js.org">
                                                     Storybook
                                                 </Link>
-                                                . I love{' '}
+                                                . I typically reach for{' '}
                                                 <Link isExternal href="https://cypress.io">
                                                     Cypress
                                                 </Link>{' '}
@@ -215,10 +210,9 @@ const Home: NextPage = () => {
                                                 for unit tests.
                                             </Text>
                                             <Text>
-                                                When it comes to the backend and infrastructure I&apos;m most familiar
-                                                with{' '}
+                                                When it comes to the backend and infrastructure I currently work with{' '}
                                                 <Link isExternal href="https://nodejs.org">
-                                                    NodeJS
+                                                    Node.js
                                                 </Link>
                                                 ,{' '}
                                                 <Link isExternal href="https://aws.amazon.com">
@@ -231,7 +225,7 @@ const Home: NextPage = () => {
                                                 .
                                             </Text>
                                             <Text>
-                                                Tooling wise I use{' '}
+                                                Tooling-wise I use{' '}
                                                 <Link isExternal href="https://code.visualstudio.com">
                                                     VS Code
                                                 </Link>
@@ -244,10 +238,6 @@ const Home: NextPage = () => {
                                                     Google
                                                 </Link>
                                                 .
-                                            </Text>
-                                            <Text>
-                                                Outside of work I like to dabble in other technologies such as ReactJS
-                                                and ThreeJS.
                                             </Text>
                                         </VStack>
                                     </TabPanel>
