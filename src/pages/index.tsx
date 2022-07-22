@@ -105,12 +105,12 @@ const Home: NextPage = () => {
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
                                 size={{ base: 'xl', md: '2xl' }}
-                                src="https://www.nickmeriano.com/static/43da40990a73c2290eeada7980c22078/59139/profile-img.png"
+                                src="images/profile-img.png"
                             ></Avatar>
                             <Avatar
                                 border="2px solid var(--chakra-colors-gray-300)"
                                 size={{ base: 'xl', md: '2xl' }}
-                                src="https://avatars.githubusercontent.com/u/47791568?s=400&u=6762e302631a56b0f530f6f649fd6172caf650ba&v=4"
+                                src="images/profile-img-2.jpg"
                                 display="none"
                             ></Avatar>
                         </Box>
