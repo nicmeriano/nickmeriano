@@ -6,8 +6,8 @@ export const colors = {
 
     // TODO: this should be defined as a semantik token https://chakra-ui.com/docs/styled-system/semantic-tokens
     text: {
-        primary: 'var(--chakra-colors-gray-200)',
-        secondary: 'var(--chakra-colors-gray-400)'
+        primary: 'var(--chakra-colors-gray-100)',
+        secondary: 'var(--chakra-colors-gray-300)'
     },
 
     gray: {
